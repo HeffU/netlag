@@ -1,0 +1,10 @@
+[submodule "libs/luajit-2.0"]
+	path = libs/luajit-2.0
+	url = http://luajit.org/git/luajit-2.0.git
+[submodule "libs/glfw"]
+	path = libs/glfw
+	url = https://github.com/glfw/glfw.git
+[submodule "libs/glew"]
+	path = libs/glew
+	url = https://github.com/nigels-com/glew.git
+	ignore = dirty
