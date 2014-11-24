@@ -27,6 +27,6 @@
 *.out
 *.app
 
-# Build output and lib files
+# Build output and suggested lib folders
 build/*
 libs/*
