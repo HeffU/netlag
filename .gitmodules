@@ -1,6 +1,3 @@
-[submodule "libs/luajit-2.0"]
-	path = libs/luajit-2.0
-	url = http://luajit.org/git/luajit-2.0.git
 [submodule "libs/glfw"]
 	path = libs/glfw
 	url = https://github.com/glfw/glfw.git
@@ -8,3 +5,6 @@
 	path = libs/glew
 	url = https://github.com/omniavinco/glew-cmake.git
 	ignore = dirty
+[submodule "libs/luajit"]
+	path = libs/luajit
+	url = https://github.com/LuaDist/luajit.git
