@@ -4,5 +4,3 @@ set( STARTUP_FILES
 )
 
 source_group("" FILES ${STARTUP_FILES})
-
-add_executable(NetLag ${STARTUP_FILES})
