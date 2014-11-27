@@ -1,5 +1,5 @@
 /**********************************************************************
-NetLag - Shenanigans in Virtual Reality
+netlag - Shenanigans in Virtual Reality
 Copyright(C) 2014 Rasmus Egerö <heff@heff.se>
 
 This program is free software : you can redistribute it and / or modify
@@ -20,4 +20,4 @@ along with this program.If not, see <http://www.gnu.org/licenses/
 
 #include "engine.h"
 
-using namespace NetLag;
+using namespace netlag;

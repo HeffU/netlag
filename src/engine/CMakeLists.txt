@@ -4,4 +4,5 @@ set(ENGINE_FILES
 	"engine.h"
 )
 
+add_subdirectory(rendering)
 add_sources(${ENGINE_FILES})

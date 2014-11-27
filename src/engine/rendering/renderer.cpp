@@ -15,18 +15,5 @@ GNU General Public License for more details.
 You should have received a copy of the GNU General Public License
 along with this program.If not, see <http://www.gnu.org/licenses/
 ***********************************************************************
-*	netlag.cpp - Entry point and bootstrapping
+*	renderer.cpp - Renderer implementaion
 **********************************************************************/
-
-#include "engine\engine.h"
-using namespace netlag;
-
-int main(int argc, char *argv[])
-{
-	Engine* engine = new Engine();
-	engine->Initialize();
-	engine->Run();
-	engine->Cleanup();
-
-	return 0;
-}
