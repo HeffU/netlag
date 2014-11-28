@@ -26,11 +26,12 @@ namespace netlag
 
 		Engine();
 		~Engine();
-		void Initialize();
-		void Cleanup();
+		int Initialize();
+		int Cleanup();
 		int Run();
 
 	private:
+		
 
 	};
 }

@@ -15,34 +15,19 @@ GNU General Public License for more details.
 You should have received a copy of the GNU General Public License
 along with this program.If not, see <http://www.gnu.org/licenses/
 ***********************************************************************
-*	engine.cpp - Engine class implementation
+*	scriptmanager.h - Scriptmanager class definition
 **********************************************************************/
 
-#include "engine.h"
-
-using namespace netlag;
-
-Engine::Engine()
+namespace netlag
 {
-	
-}
+	class ScriptManager
+	{
+	public :
+		ScriptManager();
+		~ScriptManager();
 
-Engine::~Engine()
-{
 
-}
+	private :
 
-int Engine::Initialize()
-{
-	return 0;
-}
-
-int Engine::Run()
-{
-	return 0;
-}
-
-int Engine::Cleanup()
-{
-	return 0;
+	};
 }

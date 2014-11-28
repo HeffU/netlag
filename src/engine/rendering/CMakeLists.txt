@@ -1,8 +1,8 @@
 
-set(ENGINE_FILES
+set(RENDERING_FILES
 	"renderer.cpp"
 	"renderer.h"
 	"rendertypes.h"
 )
 
-add_sources(${ENGINE_FILES})
+add_sources(${RENDERING_FILES})
