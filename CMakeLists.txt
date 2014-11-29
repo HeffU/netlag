@@ -45,6 +45,7 @@ endmacro()
 # Source setup and target creation
 #
 add_subdirectory(src)
+add_subdirectory(libs/foundation)
 add_executable(NetLag ${NETLAG_SOURCE_FILES})
 
 

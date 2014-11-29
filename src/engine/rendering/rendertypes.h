@@ -17,3 +17,4 @@ along with this program.If not, see <http://www.gnu.org/licenses/
 ***********************************************************************
 *	rendertypes.h - Data types for rendering
 **********************************************************************/
+#pragma once

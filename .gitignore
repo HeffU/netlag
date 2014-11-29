@@ -29,4 +29,7 @@
 
 # Build output and suggested lib folders
 build/*
-libs/*
+libs/glew/*
+libs/glfw/*
+libs/luajit/*
+libs/ovr/*
