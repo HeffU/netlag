@@ -15,23 +15,25 @@ GNU General Public License for more details.
 You should have received a copy of the GNU General Public License
 along with this program.If not, see <http://www.gnu.org/licenses/
 ***********************************************************************
-*	scriptmanager.h - Scriptmanager class definition
+*	hashing.h - Various hashing functions
 **********************************************************************/
 #pragma once
 
-#include <collection_types.h>
-
 namespace netlag
 {
-	class ScriptManager
+	namespace utilities
 	{
-	public :
-		ScriptManager();
-		~ScriptManager();
-		uint64_t LoadScript(unsigned char* path);
-		int RunScript(uint64_t handle, int state_id = 0);
-		void TerminateScript(uint64_t handle);
+		// Dan Bernstein's djb2 hash
+		// [http://www.cse.yorku.ca/~oz/hash.html]
 
-	private :
-	};
+		unsigned long djb2hash(unsigned char *str) {
+			unsigned long hash = 5381;
+			int c;
+
+			while (c = *str++) {
+				hash = ((hash << 5) + hash) + c; /* hash * 33 + c */
+			}
+			return hash;
+		}
+	}
 }

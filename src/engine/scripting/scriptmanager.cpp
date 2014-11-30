@@ -19,4 +19,26 @@ along with this program.If not, see <http://www.gnu.org/licenses/
 **********************************************************************/
 
 #include "scriptmanager.h"
+#include "../utilities/hashing.h"
+
 using namespace netlag;
+
+ScriptManager::ScriptManager()
+{
+
+}
+
+ScriptManager::~ScriptManager()
+{
+
+}
+
+uint64_t ScriptManager::LoadScript(unsigned char* path)
+{
+	uint64_t handle = utilities::djb2hash(path);
+}
+
+int ScriptManager::RunScript(uint64_t handle, int state_id)
+{
+
+}

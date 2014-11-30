@@ -88,6 +88,10 @@ set(OVR_INCLUDE_DIR ${CMAKE_CURRENT_SOURCE_DIR}/libs/ovr/Include
 set(OVR_LIBRARY_DIR ${CMAKE_CURRENT_SOURCE_DIR}/libs/ovr/Lib/Win32/VS2013
 	CACHE PATH "Oculus SDK library files path" )
 	
+# foundation
+set(FOUNDATION_INCLUDE_DIR ${CMAKE_CURRENT_SOURCE_DIR}/libs/foundation 
+	CACHE PATH "Bitsquid foundation library include files path" )
+	
 ###########################################################
 # Include and linking setup
 #
@@ -100,6 +104,8 @@ include_directories(${GLFW_INCLUDE_DIR})
 include_directories(${LUAJIT_INCLUDE_DIR})
 # LibOVR
 include_directories(${OVR_INCLUDE_DIR})
+# foundation
+include_directories(${FOUNDATION_INCLUDE_DIR})
 
 
 ###########################################################
