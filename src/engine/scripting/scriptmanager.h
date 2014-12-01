@@ -20,18 +20,36 @@ along with this program.If not, see <http://www.gnu.org/licenses/
 #pragma once
 
 #include <collection_types.h>
+#include <lua.h>
+#include <thread>
 
 namespace netlag
 {
+	struct luaenv
+	{
+		bool idle = true;
+		lua_State* state = nullptr;
+		std::thread* thread = nullptr;
+	};
+
 	class ScriptManager
 	{
 	public :
-		ScriptManager();
+		ScriptManager(foundation::Allocator* alloc);
 		~ScriptManager();
-		uint64_t LoadScript(unsigned char* path);
+		uint64_t LoadScript(unsigned char* path, unsigned int len);
+
+		//Run a script in a certain lua state, by default state 0.
+		//Returns an error if the state's thread is busy
 		int RunScript(uint64_t handle, int state_id = 0);
+
 		void TerminateScript(uint64_t handle);
+		void TerminateState(int state);
+
+		int NewState(bool init = true);
 
 	private :
+
+		foundation::Array<luaenv> _envs;
 	};
 }

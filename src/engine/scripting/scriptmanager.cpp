@@ -19,13 +19,18 @@ along with this program.If not, see <http://www.gnu.org/licenses/
 **********************************************************************/
 
 #include "scriptmanager.h"
-#include "../utilities/hashing.h"
+#include "murmur_hash.h"
+#include <lauxlib.h>
+#include <lualib.h>
+#include <array.h>
 
 using namespace netlag;
+using namespace foundation;
 
-ScriptManager::ScriptManager()
+ScriptManager::ScriptManager(Allocator* alloc)
+	:_envs(Array<luaenv>(*alloc))
 {
-
+	NewState();
 }
 
 ScriptManager::~ScriptManager()
@@ -33,12 +38,40 @@ ScriptManager::~ScriptManager()
 
 }
 
-uint64_t ScriptManager::LoadScript(unsigned char* path)
+int ScriptManager::NewState(bool init)
 {
-	uint64_t handle = utilities::djb2hash(path);
+	lua_State* L = luaL_newstate();
+	luaL_openlibs(L);
+
+	luaenv env;
+	env.state = L;
+	env.thread = new std::thread();
+
+	if (init)
+	{
+		//run bootstrap script to load all game libs here
+	}
+
+	array::push_back(_envs, env);
+	return array::size(_envs) - 1;
+}
+
+uint64_t ScriptManager::LoadScript(unsigned char* path, unsigned int len)
+{
+	uint64_t handle = foundation::murmur_hash_64(path, len, 0);
 }
 
 int ScriptManager::RunScript(uint64_t handle, int state_id)
+{
+
+}
+
+void ScriptManager::TerminateScript(uint64_t handle)
+{
+
+}
+
+void ScriptManager::TerminateState(int state)
 {
 
 }
