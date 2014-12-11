@@ -36,6 +36,8 @@ namespace netlag
 	struct luascript
 	{
 		unsigned char* path = nullptr;
+		uint64_t handle = 0;
+		int version = 0;
 	};
 
 	class ScriptManager
@@ -51,7 +53,6 @@ namespace netlag
 
 		bool StateAvailable(unsigned int state_id);
 
-		void TerminateScript(uint64_t handle);
 		void TerminateState(unsigned int state);
 
 		int NewState(bool init = true);

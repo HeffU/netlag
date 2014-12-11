@@ -32,13 +32,14 @@ ScriptManager::ScriptManager(Allocator* alloc)
 	:_envs(Array<luaenv>(*alloc)),
 	_scripts(Hash<luascript>(*alloc))
 {
-	NewState();
 	//LoadScript( _loader script_ );
+	NewState();
 }
 
 ScriptManager::~ScriptManager()
 {
-
+	array::clear(_envs);
+	hash::clear(_scripts);
 }
 
 int ScriptManager::NewState(bool init)
@@ -74,6 +75,7 @@ bool ScriptManager::StateAvailable(unsigned int state_id)
 uint64_t ScriptManager::LoadScript(unsigned char* path, unsigned int len)
 {
 	uint64_t handle = foundation::murmur_hash_64(path, len, 0);
+	// get script from assetmanager
 }
 
 int ScriptManager::RunScript(uint64_t handle, int state_id)
@@ -83,7 +85,7 @@ int ScriptManager::RunScript(uint64_t handle, int state_id)
 	luascript script;
 	script = hash::get(_scripts, handle, script);
 	if (script.path == nullptr)
-		return -1; // fix, this means the script doesnt exist in the manager
+		return -2; // fix, this means the script doesnt exist in the manager
 	// Update this to correctly work with concurrent access to a single script
 	// once the resource manager is active
 	luaenv env = _envs[state_id];
@@ -97,12 +99,7 @@ void ScriptManager::_runLua(luaenv env, luascript script)
 	env.mutex->unlock();
 }
 
-void ScriptManager::TerminateScript(uint64_t handle)
-{
-
-}
-
 void ScriptManager::TerminateState(unsigned int state)
 {
-
+	// needed? feasible?
 }
