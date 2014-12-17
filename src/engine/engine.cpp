@@ -19,6 +19,7 @@ along with this program.If not, see <http://www.gnu.org/licenses/
 **********************************************************************/
 
 #include "engine.h"
+#include "memory.h"
 
 using namespace netlag;
 
@@ -34,6 +35,14 @@ Engine::~Engine()
 
 int Engine::Initialize()
 {
+	// Initialize memory allocators
+	foundation::memory_globals::init();
+	_mainAlloc = &foundation::memory_globals::default_allocator();
+
+	// Initialize scripting
+	_scriptMgr = new ScriptManager(_mainAlloc);
+
+
 	return 0;
 }
 

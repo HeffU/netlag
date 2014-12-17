@@ -60,8 +60,6 @@ namespace netlag
 
 		bool StateAvailable(unsigned int state_id);
 
-		void TerminateState(unsigned int state);
-
 		int NewState(bool init = true);
 
 	private :

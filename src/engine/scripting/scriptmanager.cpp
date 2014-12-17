@@ -28,6 +28,7 @@ extern "C"
 #include <lauxlib.h>
 #include <lualib.h>
 }
+
 using namespace netlag;
 using namespace foundation;
 
@@ -58,8 +59,8 @@ int ScriptManager::NewState(bool init)
 	array::push_back(_envs, env);
 	if (init)
 	{
-		lua_register(env.state, "get_packaged_module", get_packaged_module);
-		luaL_dostring(env.state, "table.insert(package.loaders, get_packaged_module)");
+		//lua_register(env.state, "get_packaged_module", get_packaged_module);
+		//luaL_dostring(env.state, "table.insert(package.loaders, get_packaged_module)");
 		//RunScript(loader script handle, id);
 	}
 	return id;
@@ -114,11 +115,6 @@ int ScriptManager::_runLua(luaenv env, luascript script)
 	}
 	env.mutex->unlock();
 	return 0;
-}
-
-void ScriptManager::TerminateState(unsigned int state)
-{
-	// needed? feasible?
 }
 
 

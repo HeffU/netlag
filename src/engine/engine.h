@@ -19,6 +19,8 @@ along with this program.If not, see <http://www.gnu.org/licenses/
 **********************************************************************/
 #pragma once
 
+#include "scripting\scriptmanager.h"
+
 namespace netlag
 {
 	class Engine
@@ -33,6 +35,7 @@ namespace netlag
 
 	private:
 		
-
+		ScriptManager* _scriptMgr;
+		foundation::Allocator *_mainAlloc;
 	};
 }
