@@ -35,9 +35,12 @@ namespace netlag
 
 	struct luascript
 	{
-		unsigned char* path = nullptr;
+		char* path = nullptr;
+		char* chunkname = nullptr;
 		uint64_t handle = 0;
 		int version = 0;
+		char* data = nullptr;
+		unsigned int size = 0;
 	};
 
 	class ScriptManager
@@ -59,9 +62,13 @@ namespace netlag
 
 	private :
 
-		void _runLua(luaenv env, luascript script);
+		int _runLua(luaenv env, luascript script);
 
 		foundation::Hash<luascript> _scripts;
 		foundation::Array<luaenv> _envs;
 	};
+
+	// Custom module loader that looks inside the asset/resource manager
+	// Adds the "require" functionality to packaged scripts
+	extern "C" int get_packaged_module(lua_State *state);
 }

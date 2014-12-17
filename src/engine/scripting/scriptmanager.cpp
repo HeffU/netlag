@@ -92,14 +92,53 @@ int ScriptManager::RunScript(uint64_t handle, int state_id)
 	*env.thread = std::thread(&ScriptManager::_runLua, env, script);
 }
 
-void ScriptManager::_runLua(luaenv env, luascript script)
+int ScriptManager::_runLua(luaenv env, luascript script)
 {
 	env.mutex->lock();
 	// run script here
+	int err = luaL_loadbuffer(env.state, script.data, script.size, script.chunkname);
+	if (err == LUA_ERRSYNTAX)
+	{
+		//fix errorhandling
+	}
+	else if (err == LUA_ERRMEM)
+	{
+		//fix errorhandling
+	}
 	env.mutex->unlock();
 }
 
 void ScriptManager::TerminateState(unsigned int state)
 {
 	// needed? feasible?
+}
+
+
+extern "C" int get_packaged_module(lua_State *state)
+{
+	// make sure this is threadsafe / the assetmanager is threadsafe!
+	const char *name = luaL_checkstring(state, 1);
+
+	// try to get script from manager
+	luascript script;
+
+	// if it exists:
+	if (true)
+	{
+		// propagate these errors back to lua? or ignore?
+		int err = luaL_loadbuffer(state, script.data, script.size, script.chunkname);
+		if (err == LUA_ERRSYNTAX)
+		{
+			//fix errorhandling
+		}
+		else if (err == LUA_ERRMEM)
+		{
+			//fix errorhandling
+		}
+	}
+	else 
+	{
+		lua_pushnil(state);
+	}
+	return 1;
 }
