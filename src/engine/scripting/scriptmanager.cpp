@@ -55,6 +55,8 @@ int ScriptManager::NewState(bool init)
 	array::push_back(_envs, env);
 	if (init)
 	{
+		lua_register(env.state, "get_packaged_module", get_packaged_module);
+		luaL_dostring(env.state, "table.insert(package.loaders, get_packaged_module)");
 		//RunScript(loader script handle, id);
 	}
 	return id;
