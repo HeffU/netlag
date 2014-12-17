@@ -53,5 +53,14 @@ int Engine::Run()
 
 int Engine::Cleanup()
 {
+	// Dirty trick here could be letting the OS handle all allocated memory.
+	// Makes for a quicker shutdown but should it be used?
+
+	// Probably ought to migrate all memory allocations to custom allocs
+	// new / delete in the meantime for classes, malloc for PODs
+	delete _scriptMgr;
+
+	foundation::memory_globals::shutdown();
+
 	return 0;
 }

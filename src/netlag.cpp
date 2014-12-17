@@ -27,6 +27,7 @@ int main(int argc, char *argv[])
 	engine->Initialize();
 	engine->Run();
 	engine->Cleanup();
+	delete engine;
 
 	return 0;
 }
