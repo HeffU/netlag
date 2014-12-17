@@ -20,9 +20,13 @@ along with this program.If not, see <http://www.gnu.org/licenses/
 #pragma once
 
 #include <collection_types.h>
-#include <lua.h>
 #include <thread>
 #include <mutex>
+
+extern "C"
+{
+#include <lua.h>
+}
 
 namespace netlag
 {

@@ -20,11 +20,14 @@ along with this program.If not, see <http://www.gnu.org/licenses/
 
 #include "scriptmanager.h"
 #include "murmur_hash.h"
-#include <lauxlib.h>
-#include <lualib.h>
 #include <array.h>
 #include <hash.h>
 
+extern "C"
+{
+#include <lauxlib.h>
+#include <lualib.h>
+}
 using namespace netlag;
 using namespace foundation;
 
@@ -78,6 +81,7 @@ uint64_t ScriptManager::LoadScript(unsigned char* path, unsigned int len)
 {
 	uint64_t handle = foundation::murmur_hash_64(path, len, 0);
 	// get script from assetmanager
+	return handle;
 }
 
 int ScriptManager::RunScript(uint64_t handle, int state_id)
@@ -91,7 +95,8 @@ int ScriptManager::RunScript(uint64_t handle, int state_id)
 	// Update this to correctly work with concurrent access to a single script
 	// once the resource manager is active
 	luaenv env = _envs[state_id];
-	*env.thread = std::thread(&ScriptManager::_runLua, env, script);
+	*env.thread = std::thread(&ScriptManager::_runLua, this, env, script);
+	return 0;
 }
 
 int ScriptManager::_runLua(luaenv env, luascript script)
@@ -108,6 +113,7 @@ int ScriptManager::_runLua(luaenv env, luascript script)
 		//fix errorhandling
 	}
 	env.mutex->unlock();
+	return 0;
 }
 
 void ScriptManager::TerminateState(unsigned int state)
