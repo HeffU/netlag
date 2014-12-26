@@ -23,6 +23,8 @@ along with this program.If not, see <http://www.gnu.org/licenses/
 #include <array.h>
 #include <hash.h>
 
+#include <iostream>
+
 extern "C"
 {
 #include <lauxlib.h>
@@ -32,12 +34,24 @@ extern "C"
 using namespace netlag;
 using namespace foundation;
 
+char test[] = "testlol";
+char testLua[] = "print('Scriptmanager Initializing..');";
+
 ScriptManager::ScriptManager(Allocator* alloc)
 	:_envs(Array<luaenv>(*alloc)),
 	_scripts(Hash<luascript>(*alloc))
 {
 	//LoadScript( _loader script_ );
 	NewState();
+
+	luascript script;
+	script.chunkname = test;
+	script.data = testLua;
+	script.size = sizeof(testLua) - 1;
+	//_runLua(_envs[0], script);
+	luaenv env = _envs[0];
+	*env.thread = std::thread(&ScriptManager::_runLua, this, env, script);
+	//std::cout << "threadTest\n";
 }
 
 ScriptManager::~ScriptManager()
@@ -54,13 +68,14 @@ int ScriptManager::NewState(bool init)
 	luaenv env;
 	env.state = L;
 	env.thread = new std::thread();
+	env.mutex = new std::mutex();
 
 	int id = array::size(_envs);
 	array::push_back(_envs, env);
 	if (init)
 	{
-		//lua_register(env.state, "get_packaged_module", get_packaged_module);
-		//luaL_dostring(env.state, "table.insert(package.loaders, get_packaged_module)");
+		lua_register(env.state, "get_packaged_module", get_packaged_module);
+		luaL_dostring(env.state, "table.insert(package.loaders, get_packaged_module)");
 		//RunScript(loader script handle, id);
 	}
 	return id;
@@ -108,11 +123,15 @@ int ScriptManager::_runLua(luaenv env, luascript script)
 	if (err == LUA_ERRSYNTAX)
 	{
 		//fix errorhandling
+		std::cout << "-- " << lua_tostring(env.state, -1) << std::endl;
 	}
 	else if (err == LUA_ERRMEM)
 	{
 		//fix errorhandling
+		std::cout << "ERROR: Lua could not allocate memory, either too low or wrong placement.\n";
 	}
+	lua_pcall(env.state, 0, 0, 0);
+
 	env.mutex->unlock();
 	return 0;
 }
@@ -127,7 +146,7 @@ extern "C" int get_packaged_module(lua_State *state)
 	luascript script;
 
 	// if it exists:
-	if (true)
+	if (false) 	//TODO: add correct exist check
 	{
 		// propagate these errors back to lua? or ignore?
 		int err = luaL_loadbuffer(state, script.data, script.size, script.chunkname);
