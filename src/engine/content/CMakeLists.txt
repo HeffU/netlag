@@ -6,4 +6,6 @@ set(CONTENT_FILES
 	"asset_loaders.h"
 )
 
+add_subdirectory(loaders)
+
 add_sources(${CONTENT_FILES})

@@ -19,7 +19,10 @@ along with this program.If not, see <http://www.gnu.org/licenses/
 **********************************************************************/
 
 #include "assetmanager.h"
-#include <hash.h>
+#include "murmur_hash.h"
+#include "hash.h"
+
+#include <cstdio>
 
 using namespace netlag;
 using namespace foundation;
@@ -44,4 +47,20 @@ int AssetManager::LoadFileList(Array<char*> list)
 int AssetManager::UnloadFileList(Array<char*> list)
 {
 	return 0;
+}
+
+int AssetManager::_loadAsset(char* path)
+{
+	asset_info asset;
+	asset.path = path;
+	asset.handle = foundation::murmur_hash_64(path, std::strlen(path), 0);
+
+	// Check if file exists in filesystem
+	// if so, start loading?
+
+	// parse type from first byte
+	// get hashed handle from path
+
+	// read second byte to see size needed
+	// allocate and call the proper loader
 }

@@ -15,32 +15,14 @@ GNU General Public License for more details.
 You should have received a copy of the GNU General Public License
 along with this program.If not, see <http://www.gnu.org/licenses/
 ***********************************************************************
-*	assetmanager.h - AssetManager class definition
+*	assetmanager.cpp - AssetManager implementaion
 **********************************************************************/
-#pragma once
-#include <collection_types.h>
-#include "asset_types.h"
-#include "asset_loaders.h"
 
-namespace netlag
+#include "../asset_loaders.h"
+
+using namespace netlag;
+
+char* ds_luascript(asset_info* info)
 {
-
-	class AssetManager
-	{
-	public:
-		AssetManager(foundation::Allocator* alloc);
-		~AssetManager();
-
-		int LoadFileList(foundation::Array<char*> list);
-		int UnloadFileList(foundation::Array<char*> list);
-
-	private:
-		ds_func _loaders[asset_type::NUM_ASSET_TYPES];
-		int _loadAsset(char* path);
-
-		//TODO: Add support for loading compressed / compiled data etc.
-		
-		foundation::Allocator* _alloc;
-		foundation::Hash<asset_info> _assets;
-	};
+	return nullptr;
 }

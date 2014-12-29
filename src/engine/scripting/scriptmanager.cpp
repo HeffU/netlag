@@ -20,8 +20,8 @@ along with this program.If not, see <http://www.gnu.org/licenses/
 
 #include "scriptmanager.h"
 #include "murmur_hash.h"
-#include <array.h>
-#include <hash.h>
+#include "array.h"
+#include "hash.h"
 
 #include <iostream>
 
@@ -107,8 +107,8 @@ int ScriptManager::RunScript(uint64_t handle, int state_id)
 		return -1; // fix returns, error handling etc.
 	luascript script;
 	script = hash::get(_scripts, handle, script);
-	if (script.path == nullptr)
-		return -2; // fix, this means the script doesnt exist in the manager
+	//if (script.path == nullptr)
+		//return -2; // fix, this means the script doesnt exist in the manager
 	// Update this to correctly work with concurrent access to a single script
 	// once the resource manager is active
 	luaenv env = _envs[state_id];
