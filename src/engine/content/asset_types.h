@@ -22,10 +22,34 @@ along with this program.If not, see <http://www.gnu.org/licenses/
 
 namespace netlag
 {
+	enum asset_type
+	{
+		// scripts
+		LUA_SCRIPT,
+
+		// scenes
+		SCENE_DEFENITION,
+		
+		// dialog
+		DIALOG,
+
+		// misc
+		INVALID
+	};
+
+	struct asset_info
+	{
+		int _refcount = 0;
+		//int version = 0; // Is this needed?
+		asset_type _type = INVALID;
+		void* asset = nullptr;
+		char* path = nullptr;
+		uint64_t handle = 0;
+	};
+
 	// Represents lua code to be loaded into a lua state
 	struct luascript
 	{
-		char* path = nullptr;
 		char* chunkname = nullptr;
 		char* data = nullptr;
 		unsigned int size = 0;
