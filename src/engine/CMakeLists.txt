@@ -4,6 +4,7 @@ set(ENGINE_FILES
 	"engine.h"
 )
 
+add_subdirectory(content)
 add_subdirectory(rendering)
 add_subdirectory(scripting)
 add_subdirectory(utilities)

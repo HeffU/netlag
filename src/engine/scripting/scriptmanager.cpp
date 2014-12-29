@@ -41,6 +41,7 @@ ScriptManager::ScriptManager(Allocator* alloc)
 	:_envs(Array<luaenv>(*alloc)),
 	_scripts(Hash<luascript>(*alloc))
 {
+	_alloc = alloc;
 	//LoadScript( _loader script_ );
 	NewState();
 

@@ -66,6 +66,8 @@ namespace netlag
 
 		int _runLua(luaenv env, luascript script);
 
+		foundation::Allocator* _alloc;
+
 		foundation::Hash<luascript> _scripts;
 		foundation::Array<luaenv> _envs;
 	};
