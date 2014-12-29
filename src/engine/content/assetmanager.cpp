@@ -19,17 +19,29 @@ along with this program.If not, see <http://www.gnu.org/licenses/
 **********************************************************************/
 
 #include "assetmanager.h"
+#include <hash.h>
 
 using namespace netlag;
 using namespace foundation;
 
 AssetManager::AssetManager(Allocator* alloc)
-	:_alloc(alloc)
+	:_alloc(alloc),
+	_assets(Hash<asset_info>(*alloc))
 {
 	
 }
 
 AssetManager::~AssetManager()
 {
+	hash::clear(_assets);
+}
 
+int AssetManager::LoadFileList(Array<char*> list)
+{
+	return 0;
+}
+
+int AssetManager::UnloadFileList(Array<char*> list)
+{
+	return 0;
 }

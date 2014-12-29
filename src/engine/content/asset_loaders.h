@@ -15,30 +15,20 @@ GNU General Public License for more details.
 You should have received a copy of the GNU General Public License
 along with this program.If not, see <http://www.gnu.org/licenses/
 ***********************************************************************
-*	assetmanager.h - AssetManager class definition
+*	asset_types.h - Definitions of asset types / structs
 **********************************************************************/
 #pragma once
 #include <collection_types.h>
 #include "asset_types.h"
-#include "asset_loaders.h"
 
 namespace netlag
 {
+	typedef asset_info(*ds_func)(char*, int);
 
-	class AssetManager
-	{
-	public:
-		AssetManager(foundation::Allocator* alloc);
-		~AssetManager();
-
-		int LoadFileList(foundation::Array<char*> list);
-		int UnloadFileList(foundation::Array<char*> list);
-
-	private:
-		
-		ds_func _loaders[asset_type::NUM_ASSET_TYPES];
-		
-		foundation::Allocator* _alloc;
-		foundation::Hash<asset_info> _assets;
-	};
+	// Deserializer for lua script files.
+	asset_info ds_luascript(char* data, int size);
+	// Deserializer for a scene defenition file.
+	asset_info ds_scenedef(char* data, int size);
+	// Deserializer for a dialo file.
+	asset_info ds_dialog(char* data, int size);
 }

@@ -34,7 +34,9 @@ namespace netlag
 		DIALOG,
 
 		// misc
-		INVALID
+		INVALID,
+		NUM_ASSET_TYPES = DIALOG 
+		// Invalid should never be present past initialization.
 	};
 
 	struct asset_info
