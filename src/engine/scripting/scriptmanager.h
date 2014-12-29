@@ -22,6 +22,7 @@ along with this program.If not, see <http://www.gnu.org/licenses/
 #include <collection_types.h>
 #include <thread>
 #include <mutex>
+#include "../content/asset_types.h"
 
 extern "C"
 {
@@ -35,16 +36,6 @@ namespace netlag
 		lua_State* state = nullptr;
 		std::thread* thread = nullptr;
 		std::mutex* mutex;
-	};
-
-	struct luascript
-	{
-		char* path = nullptr;
-		char* chunkname = nullptr;
-		uint64_t handle = 0;
-		int version = 0;
-		char* data = nullptr;
-		unsigned int size = 0;
 	};
 
 	class ScriptManager

@@ -15,21 +15,19 @@ GNU General Public License for more details.
 You should have received a copy of the GNU General Public License
 along with this program.If not, see <http://www.gnu.org/licenses/
 ***********************************************************************
-*	assetmanager.h - AssetManager class definition
+*	asset_types.h - Definitions of asset types / structs
 **********************************************************************/
 #pragma once
 #include <collection_types.h>
 
 namespace netlag
 {
-
-	class AssetManager
+	// Represents lua code to be loaded into a lua state
+	struct luascript
 	{
-	public:
-		AssetManager(foundation::Allocator* alloc);
-		~AssetManager();
-
-	private:
-		foundation::Allocator* _alloc;
+		char* path = nullptr;
+		char* chunkname = nullptr;
+		char* data = nullptr;
+		unsigned int size = 0;
 	};
 }

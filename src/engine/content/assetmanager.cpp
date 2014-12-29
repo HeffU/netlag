@@ -17,3 +17,19 @@ along with this program.If not, see <http://www.gnu.org/licenses/
 ***********************************************************************
 *	assetmanager.cpp - AssetManager implementaion
 **********************************************************************/
+
+#include "assetmanager.h"
+
+using namespace netlag;
+using namespace foundation;
+
+AssetManager::AssetManager(Allocator* alloc)
+	:_alloc(alloc)
+{
+	
+}
+
+AssetManager::~AssetManager()
+{
+
+}
