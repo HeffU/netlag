@@ -42,5 +42,6 @@ namespace netlag
 		
 		foundation::Allocator* _alloc;
 		foundation::Hash<asset_info> _assets;
+		foundation::Hash<int> _assetExts;
 	};
 }
