@@ -65,6 +65,9 @@ int Engine::Run()
 	int state = _scriptMgr->NewState();
 	_scriptMgr->RunScript(handle, state);
 	//_scriptMgr->RunString("print('Scriptmanager Initializing..');");
+
+	while (true);
+
 	return 0;
 }
 
