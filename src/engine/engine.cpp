@@ -21,6 +21,10 @@ along with this program.If not, see <http://www.gnu.org/licenses/
 #include "engine.h"
 #include "memory.h"
 
+// For temp tests:
+#include "array.h"
+#include "murmur_hash.h"
+
 using namespace netlag;
 
 Engine::Engine()
@@ -51,6 +55,15 @@ int Engine::Initialize()
 int Engine::Run()
 {
 	// Temp tests.
+	char* path = (char*)_mainAlloc->allocate(sizeof("test.lua"));
+	path = "test.lua";
+	foundation::Array<char*> list(*_mainAlloc);
+	foundation::array::push_back(list, path);
+	_assetMgr->LoadFileList(list);
+	uint64_t handle = foundation::murmur_hash_64
+		(path, sizeof("test.lua")-1, 0);
+	int state = _scriptMgr->NewState();
+	_scriptMgr->RunScript(handle, state);
 	//_scriptMgr->RunString("print('Scriptmanager Initializing..');");
 	return 0;
 }

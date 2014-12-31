@@ -35,7 +35,7 @@ namespace netlag
 
 		// misc
 		INVALID,
-		NUM_ASSET_TYPES = DIALOG 
+		NUM_ASSET_TYPES
 		// Invalid should never be present past initialization.
 	};
 
@@ -47,6 +47,7 @@ namespace netlag
 		void* asset = nullptr;
 		char* path = nullptr;
 		uint64_t handle = 0;
+		int filesize = 0;
 	};
 
 	// Represents lua code to be loaded into a lua state

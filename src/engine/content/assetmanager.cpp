@@ -54,7 +54,16 @@ AssetManager::~AssetManager()
 
 int AssetManager::LoadFileList(Array<char*> list)
 {
-	return 0;
+	int size = array::size(list);
+	int newLoads = 0;
+	for (int n = 0; n < size; n++)
+	{
+		// TODO: fix so that it checks for existing, 
+		// and updates refcount etc.
+		_loadAsset(list[n]);
+		newLoads++;
+	}
+	return newLoads;
 }
 
 int AssetManager::UnloadFileList(Array<char*> list)
@@ -74,25 +83,29 @@ int AssetManager::_loadAsset(char* path)
 	// Check if file exists, get file stats and try to open it
 	struct stat st;
 	stat(path, &st);
+	asset.filesize = st.st_size;
 	FILE* file = fopen(path, "r");
 	if (file == NULL)
 		return -1; // error handling..
 
 	// Get the extensions handle and validate that its proper
-	uint64_t typehandle = murmur_hash_64(&path[(len - 3) - 1], 3, 0);
+	uint64_t typehandle = murmur_hash_64(&path[(len - 3)], 3, 0);
 	int type = hash::get(_assetExts, typehandle, -1);
 	if (type == -1)
 		return -2; // err
 	asset._type = (asset_type)type;
 
 	// alloc memory for the file, read and close.
-	asset.asset = (char*)_alloc->allocate(st.st_size);
-	if (fread(asset.asset, st.st_size, 1, file) != st.st_size)
-		return -3; // err
+	asset.asset = (char*)_alloc->allocate(asset.filesize);
+	int bytesread = fread(asset.asset, 1, asset.filesize, file);
+	// Can't meaningfully check amount read as size is not correct.
+	//if ( bytesread != asset.filesize)
+		//return -3; // err
+	asset.filesize = bytesread;
 	fclose(file);
 
 	// call the proper loader and add the asset to the hash
-	_loaders[type](asset);
+	asset.asset = _loaders[type](asset, _alloc);
 	hash::set(_assets, asset.handle, asset);
 	return 0;
 }

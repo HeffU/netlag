@@ -19,20 +19,29 @@ along with this program.If not, see <http://www.gnu.org/licenses/
 **********************************************************************/
 
 #include "../asset_loaders.h"
+#include "memory.h"
 
 using namespace netlag;
+using namespace foundation;
 
-char* netlag::ds_luascript(asset_info info)
+char* netlag::ds_luascript(asset_info info, Allocator* alloc)
+{
+	luascript* script = (luascript*)alloc->allocate(sizeof(luascript));
+	// As the script is already allocated, simply redirect pointers.
+	script->data = (char*)info.asset;
+	// TODO: define / specify this
+	script->chunkname = "netlag";
+	script->size = info.filesize;
+
+	return (char*)script;
+}
+
+char* netlag::ds_scenedef(asset_info info, Allocator* alloc)
 {
 	return nullptr;
 }
 
-char* netlag::ds_scenedef(asset_info info)
-{
-	return nullptr;
-}
-
-char* netlag::ds_dialog(asset_info info)
+char* netlag::ds_dialog(asset_info info, Allocator* alloc)
 {
 	return nullptr;
 }

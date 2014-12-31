@@ -22,15 +22,15 @@ along with this program.If not, see <http://www.gnu.org/licenses/
 
 namespace netlag
 {
-	typedef char* (*ds_func)(asset_info);
+	typedef char* (*ds_func)(asset_info, foundation::Allocator*);
 
 	// TODO: for now, its assumed that all target platforms are set to
 	// little-endian. In case this ever changes, this needs an overhaul
 
 	// Deserializer for lua script files.
-	char* ds_luascript(asset_info info);
+	char* ds_luascript(asset_info info, foundation::Allocator* alloc);
 	// Deserializer for a scene defenition file.
-	char* ds_scenedef(asset_info info);
+	char* ds_scenedef(asset_info info, foundation::Allocator* alloc);
 	// Deserializer for a dialo file.
-	char* ds_dialog(asset_info info);
+	char* ds_dialog(asset_info info, foundation::Allocator* alloc);
 }
