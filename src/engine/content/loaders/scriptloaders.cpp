@@ -22,7 +22,17 @@ along with this program.If not, see <http://www.gnu.org/licenses/
 
 using namespace netlag;
 
-char* ds_luascript(asset_info* info)
+char* netlag::ds_luascript(asset_info info)
+{
+	return nullptr;
+}
+
+char* netlag::ds_scenedef(asset_info info)
+{
+	return nullptr;
+}
+
+char* netlag::ds_dialog(asset_info info)
 {
 	return nullptr;
 }

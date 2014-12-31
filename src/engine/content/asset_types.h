@@ -39,6 +39,14 @@ namespace netlag
 		// Invalid should never be present past initialization.
 	};
 
+	struct asset_header
+	{
+		char type;
+		int filesize;
+		//int assetsize;
+		// int version; //needed?
+	};
+
 	struct asset_info
 	{
 		int _refcount = 0;
