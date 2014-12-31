@@ -20,6 +20,7 @@ along with this program.If not, see <http://www.gnu.org/licenses/
 #pragma once
 
 #include "scripting\scriptmanager.h"
+#include "content\assetmanager.h"
 
 namespace netlag
 {
@@ -35,6 +36,7 @@ namespace netlag
 
 	private:
 		
+		AssetManager* _assetMgr;
 		ScriptManager* _scriptMgr;
 		foundation::Allocator *_mainAlloc;
 	};

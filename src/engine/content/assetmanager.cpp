@@ -96,3 +96,9 @@ int AssetManager::_loadAsset(char* path)
 	hash::set(_assets, asset.handle, asset);
 	return 0;
 }
+
+asset_info AssetManager::GetAsset(uint64_t handle)
+{
+	asset_info info;
+	return hash::get<asset_info>(_assets, handle, info);
+}

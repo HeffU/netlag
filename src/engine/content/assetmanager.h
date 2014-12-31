@@ -34,6 +34,8 @@ namespace netlag
 		int LoadFileList(foundation::Array<char*> list);
 		int UnloadFileList(foundation::Array<char*> list);
 
+		asset_info GetAsset(uint64_t handle);
+
 	private:
 		ds_func _loaders[asset_type::NUM_ASSET_TYPES];
 		int _loadAsset(char* path);

@@ -23,6 +23,7 @@ along with this program.If not, see <http://www.gnu.org/licenses/
 #include <thread>
 #include <mutex>
 #include "../content/asset_types.h"
+#include "../content/assetmanager.h"
 
 extern "C"
 {
@@ -41,9 +42,8 @@ namespace netlag
 	class ScriptManager
 	{
 	public :
-		ScriptManager(foundation::Allocator* alloc);
+		ScriptManager(foundation::Allocator* alloc, AssetManager* assetMgr);
 		~ScriptManager();
-		uint64_t LoadScript(unsigned char* path, unsigned int len);
 
 		//Run a script in a certain lua state, by default state 0.
 		//Returns an error if the state's thread is busy
@@ -58,9 +58,8 @@ namespace netlag
 		int _runLua(luaenv env, luascript script);
 
 		foundation::Allocator* _alloc;
-
-		foundation::Hash<luascript> _scripts;
 		foundation::Array<luaenv> _envs;
+		AssetManager* _assetMgr;
 	};
 
 	// Custom module loader that looks inside the asset/resource manager

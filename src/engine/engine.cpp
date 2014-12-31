@@ -39,9 +39,11 @@ int Engine::Initialize()
 	foundation::memory_globals::init();
 	_mainAlloc = &foundation::memory_globals::default_allocator();
 
-	// Initialize scripting
-	_scriptMgr = new ScriptManager(_mainAlloc);
+	// Initialize asset loading
+	_assetMgr = new AssetManager(_mainAlloc);
 
+	// Initialize scripting
+	_scriptMgr = new ScriptManager(_mainAlloc, _assetMgr);
 
 	return 0;
 }
@@ -58,6 +60,7 @@ int Engine::Cleanup()
 
 	// Probably ought to migrate all memory allocations to custom allocs
 	// new / delete in the meantime for classes, malloc for PODs
+	delete _assetMgr;
 	delete _scriptMgr;
 
 	foundation::memory_globals::shutdown();

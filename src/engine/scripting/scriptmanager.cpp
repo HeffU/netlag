@@ -37,10 +37,10 @@ using namespace foundation;
 char test[] = "testlol";
 char testLua[] = "print('Scriptmanager Initializing..');";
 
-ScriptManager::ScriptManager(Allocator* alloc)
+ScriptManager::ScriptManager(Allocator* alloc, AssetManager* assetMgr)
 	:_envs(Array<luaenv>(*alloc)),
-	_scripts(Hash<luascript>(*alloc)),
-	_alloc(alloc)
+	_alloc(alloc),
+	_assetMgr(assetMgr)
 {
 	//LoadScript( _loader script_ );
 	NewState();
@@ -58,7 +58,6 @@ ScriptManager::ScriptManager(Allocator* alloc)
 ScriptManager::~ScriptManager()
 {
 	array::clear(_envs);
-	hash::clear(_scripts);
 }
 
 int ScriptManager::NewState(bool init)
@@ -94,25 +93,19 @@ bool ScriptManager::StateAvailable(unsigned int state_id)
 	return true;
 }
 
-uint64_t ScriptManager::LoadScript(unsigned char* path, unsigned int len)
-{
-	uint64_t handle = foundation::murmur_hash_64(path, len, 0);
-	// get script from assetmanager
-	return handle;
-}
 
 int ScriptManager::RunScript(uint64_t handle, int state_id)
 {
 	if (!StateAvailable(state_id))
 		return -1; // fix returns, error handling etc.
-	luascript script;
-	script = hash::get(_scripts, handle, script);
-	//if (script.path == nullptr)
-		//return -2; // fix, this means the script doesnt exist in the manager
-	// Update this to correctly work with concurrent access to a single script
-	// once the resource manager is active
+	// Try to get the script from the assetmanager
+	asset_info info = _assetMgr->GetAsset(handle);
+	if (info._type == INVALID)
+		return -2; // fix, this means the script doesnt exist in the manager
+	luascript* script = (luascript*)info.asset;
+
 	luaenv env = _envs[state_id];
-	*env.thread = std::thread(&ScriptManager::_runLua, this, env, script);
+	*env.thread = std::thread(&ScriptManager::_runLua, this, env, *script);
 	return 0;
 }
 
