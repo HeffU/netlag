@@ -50,6 +50,8 @@ int Engine::Initialize()
 
 int Engine::Run()
 {
+	// Temp tests.
+	//_scriptMgr->RunString("print('Scriptmanager Initializing..');");
 	return 0;
 }
 

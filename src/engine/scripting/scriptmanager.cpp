@@ -34,9 +34,6 @@ extern "C"
 using namespace netlag;
 using namespace foundation;
 
-char test[] = "testlol";
-char testLua[] = "print('Scriptmanager Initializing..');";
-
 ScriptManager::ScriptManager(Allocator* alloc, AssetManager* assetMgr)
 	:_envs(Array<luaenv>(*alloc)),
 	_alloc(alloc),
@@ -44,15 +41,6 @@ ScriptManager::ScriptManager(Allocator* alloc, AssetManager* assetMgr)
 {
 	//LoadScript( _loader script_ );
 	NewState();
-
-	luascript script;
-	script.chunkname = test;
-	script.data = testLua;
-	script.size = sizeof(testLua) - 1;
-	//_runLua(_envs[0], script);
-	luaenv env = _envs[0];
-	*env.thread = std::thread(&ScriptManager::_runLua, this, env, script);
-	//std::cout << "threadTest\n";
 }
 
 ScriptManager::~ScriptManager()
@@ -106,6 +94,21 @@ int ScriptManager::RunScript(uint64_t handle, int state_id)
 
 	luaenv env = _envs[state_id];
 	*env.thread = std::thread(&ScriptManager::_runLua, this, env, *script);
+	return 0;
+}
+
+int ScriptManager::RunString(char* lua, int state_id)
+{
+	if (!StateAvailable(state_id))
+		return -1; // err
+
+	luascript script;
+	script.chunkname = "temp";
+	script.data = lua;
+	script.size = strlen(lua);
+
+	luaenv env = _envs[state_id];
+	*env.thread = std::thread(&ScriptManager::_runLua, this, env, script);
 	return 0;
 }
 

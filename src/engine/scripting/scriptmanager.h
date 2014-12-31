@@ -48,6 +48,8 @@ namespace netlag
 		//Run a script in a certain lua state, by default state 0.
 		//Returns an error if the state's thread is busy
 		int RunScript(uint64_t handle, int state_id = 0);
+		//Run a string of lua, defaults to state 0.
+		int RunString(char* lua, int state_id = 0);
 
 		bool StateAvailable(unsigned int state_id);
 
