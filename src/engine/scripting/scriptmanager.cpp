@@ -24,6 +24,7 @@ along with this program.If not, see <http://www.gnu.org/licenses/
 #include "hash.h"
 
 #include <iostream>
+#include "..\utilities\hashing.h"
 
 extern "C"
 {
@@ -33,6 +34,8 @@ extern "C"
 
 using namespace netlag;
 using namespace foundation;
+
+extern "C" int get_packaged_module(lua_State *state);
 
 ScriptManager::ScriptManager(Allocator* alloc, AssetManager* assetMgr)
 	:_envs(Array<luaenv>(*alloc)),
@@ -127,13 +130,18 @@ int ScriptManager::_runLua(luaenv env, luascript script)
 		//fix errorhandling
 		std::cout << "ERROR: Lua could not allocate memory, either too low or wrong placement.\n";
 	}
-	lua_pcall(env.state, 0, 0, 0);
+	err = lua_pcall(env.state, 0, 0, 0);
+	if (err != 0)
+	{
+		std::cout << "-- " << lua_tostring(env.state, -1) << std::endl;
+	}
 
 	env.mutex->unlock();
 	return 0;
 }
 
-
+// Custom module loader that looks inside the asset/resource manager
+// Adds the "require" functionality to packaged scripts
 extern "C" int get_packaged_module(lua_State *state)
 {
 	// make sure this is threadsafe / the assetmanager is threadsafe!

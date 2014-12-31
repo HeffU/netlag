@@ -19,10 +19,31 @@ along with this program.If not, see <http://www.gnu.org/licenses/
 **********************************************************************/
 #pragma once
 
-namespace netlag
-{
-	namespace utilities
+#include "hashing.h"
+#include "murmur_hash.h"
+
+
+// Dan Bernstein's djb2 hash
+// [http://www.cse.yorku.ca/~oz/hash.html]
+unsigned long netlag::utilities::djb2hash(unsigned char *str) {
+	unsigned long hash = 5381;
+	int c;
+
+	while (c = *str++) {
+		hash = ((hash << 5) + hash) + c; /* hash * 33 + c */
+	}
+	return hash;
+}
+
+extern "C" {
+	__declspec(dllexport) unsigned long hash_djb2(unsigned char *str)
 	{
-		unsigned long djb2hash(unsigned char *str);
+		return netlag::utilities::djb2hash(str);
+	}
+
+	__declspec(dllexport) unsigned long long hash_murmur64
+		(const unsigned char *str, unsigned int len)
+	{
+		return foundation::murmur_hash_64(str, len, 0);
 	}
 }

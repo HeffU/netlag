@@ -18,4 +18,21 @@ along with this program.If not, see <http://www.gnu.org/licenses/
 *	test.lua - work in progress test file
 *******************************************************************--]]
 
-print("New State")
+print("Lua testing:")
+
+print("Loading FFI:")
+local ffi = require("ffi")
+ffi.cdef[[
+int printf(const char *fmt, ...);
+]]
+ffi.C.printf("FFI %s!\n", "loaded")
+
+ffi.cdef[[
+unsigned long long hash_murmur64
+		(const unsigned char *str, unsigned int len);
+]]
+print("murmur64('lua'): ", ffi.C.hash_murmur64("lua", 3))
+
+print("Testing done.")
+
+

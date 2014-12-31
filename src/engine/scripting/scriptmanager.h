@@ -63,8 +63,4 @@ namespace netlag
 		foundation::Array<luaenv> _envs;
 		AssetManager* _assetMgr;
 	};
-
-	// Custom module loader that looks inside the asset/resource manager
-	// Adds the "require" functionality to packaged scripts
-	extern "C" int get_packaged_module(lua_State *state);
 }
