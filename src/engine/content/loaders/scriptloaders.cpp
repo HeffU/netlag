@@ -51,6 +51,7 @@ int netlag::ul_luascript(asset_info info, foundation::Allocator* alloc)
 {
 	luascript* script = (luascript*)info.asset;
 	alloc->deallocate(script->data);
+	alloc->deallocate(script);
 	return 0;
 }
 

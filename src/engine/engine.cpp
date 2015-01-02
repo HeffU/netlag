@@ -29,12 +29,14 @@ using namespace netlag;
 
 Engine::Engine()
 {
-	
+	if (!glfwInit()) { // TODO: log / output errors.
+		exit(EXIT_FAILURE);
+	}
 }
 
 Engine::~Engine()
 {
-
+	glfwTerminate();
 }
 
 int Engine::Initialize()
@@ -55,22 +57,19 @@ int Engine::Initialize()
 int Engine::Run()
 {
 	// Temp tests.
-	char* path = (char*)_mainAlloc->allocate(sizeof("test.lua"));
-	path = "test.lua";
+	char* path = "test.lua";
 	foundation::Array<char*> list(*_mainAlloc);
 	foundation::array::push_back(list, path);
 	_assetMgr->LoadFileList(list);
 	uint64_t handle = foundation::murmur_hash_64
 		(path, sizeof("test.lua")-1, 0);
-	int state = _scriptMgr->NewState();
-	_scriptMgr->RunScript(handle, state);
+	_scriptMgr->RunScript(handle);
 	//_scriptMgr->RunString("print('Scriptmanager Initializing..');");
 
+	while (!_scriptMgr->StateAvailable(0));
+
 	_assetMgr->UnloadFileList(list);
-	asset_info asset = _assetMgr->GetAsset(handle);
-
-	while (true);
-
+	foundation::array::clear(list);
 	return 0;
 }
 

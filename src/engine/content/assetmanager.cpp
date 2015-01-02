@@ -49,6 +49,17 @@ AssetManager::AssetManager(Allocator* alloc)
 
 AssetManager::~AssetManager()
 {
+	if (array::size(_assets._data) > 0)
+	{
+		asset_info asset = hash::begin(_assets)->value;
+		uint32_t next = 0;
+		while (next != -1)
+		{
+			_unloaders[asset._type](asset, _alloc);
+			next = _assets._data[next].next;
+			asset = _assets._data[next].value;
+		}
+	}
 	hash::clear(_assets);
 	hash::clear(_assetExts);
 }
