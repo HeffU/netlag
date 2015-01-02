@@ -47,17 +47,19 @@ char* netlag::ds_dialog(asset_info info, Allocator* alloc)
 }
 
 
-char* netlag::ul_luascript(asset_info info)
+int netlag::ul_luascript(asset_info info, foundation::Allocator* alloc)
 {
-	return nullptr;
+	luascript* script = (luascript*)info.asset;
+	alloc->deallocate(script->data);
+	return 0;
 }
 
-char* netlag::ul_scenedef(asset_info info)
+int netlag::ul_scenedef(asset_info info, foundation::Allocator* alloc)
 {
-	return nullptr;
+	return 0;
 }
 
-char* netlag::ul_dialog(asset_info info)
+int netlag::ul_dialog(asset_info info, foundation::Allocator* alloc)
 {
-	return nullptr;
+	return 0;
 }

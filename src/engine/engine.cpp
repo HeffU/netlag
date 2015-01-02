@@ -66,6 +66,9 @@ int Engine::Run()
 	_scriptMgr->RunScript(handle, state);
 	//_scriptMgr->RunString("print('Scriptmanager Initializing..');");
 
+	_assetMgr->UnloadFileList(list);
+	asset_info asset = _assetMgr->GetAsset(handle);
+
 	while (true);
 
 	return 0;

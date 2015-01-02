@@ -120,6 +120,7 @@ int AssetManager::_loadAsset(char* path)
 
 	// call the proper loader and add the asset to the hash
 	asset.asset = _loaders[type](asset, _alloc);
+	asset._refcount = 1;
 	hash::set(_assets, asset.handle, asset);
 	return 0;
 }
@@ -140,7 +141,7 @@ int AssetManager::_unloadAsset(char* path)
 		if (asset._refcount <= 0)
 		{
 			hash::remove(_assets, asset.handle);
-			_unloaders[asset._type](asset);
+			_unloaders[asset._type](asset, _alloc);
 			return 0;
 		}
 		hash::set(_assets, asset.handle, asset);

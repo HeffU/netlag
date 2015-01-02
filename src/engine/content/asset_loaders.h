@@ -23,7 +23,7 @@ along with this program.If not, see <http://www.gnu.org/licenses/
 namespace netlag
 {
 	typedef char* (*ds_func)(asset_info, foundation::Allocator*);
-	typedef char* (*ul_func)(asset_info);
+	typedef int (*ul_func)(asset_info, foundation::Allocator*);
 
 	// TODO: for now, its assumed that all target platforms are set to
 	// little-endian. In case this ever changes, this needs an overhaul
@@ -36,9 +36,9 @@ namespace netlag
 	char* ds_dialog(asset_info info, foundation::Allocator* alloc);
 
 	// Cleanup for lua script files.
-	char* ul_luascript(asset_info info);
+	int ul_luascript(asset_info info, foundation::Allocator* alloc);
 	// Cleanup for a scene defenition file.
-	char* ul_scenedef(asset_info info);
+	int ul_scenedef(asset_info info, foundation::Allocator* alloc);
 	// Cleanup for a dialo file.
-	char* ul_dialog(asset_info info);
+	int ul_dialog(asset_info info, foundation::Allocator* alloc);
 }
