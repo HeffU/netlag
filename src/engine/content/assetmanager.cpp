@@ -58,10 +58,8 @@ int AssetManager::LoadFileList(Array<char*> list)
 	int newLoads = 0;
 	for (int n = 0; n < size; n++)
 	{
-		// TODO: fix so that it checks for existing, 
-		// and updates refcount etc.
-		_loadAsset(list[n]);
-		newLoads++;
+		if (_loadAsset(list[n]) == 0)
+			newLoads++;
 	}
 	return newLoads;
 }
@@ -79,6 +77,14 @@ int AssetManager::_loadAsset(char* path)
 	asset.path = path;
 	asset.handle = murmur_hash_64(path, len, 0);
 
+	// if the file is loaded allready
+	if (hash::has(_assets, asset.handle))
+	{
+		asset = hash::get(_assets, asset.handle, asset);
+		asset._refcount++;
+		hash::set(_assets, asset.handle, asset);
+		return 1;
+	}
 
 	// Check if file exists, get file stats and try to open it
 	struct stat st;
