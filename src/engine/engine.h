@@ -19,6 +19,16 @@ along with this program.If not, see <http://www.gnu.org/licenses/
 **********************************************************************/
 #pragma once
 
+#include "utilities\platform.h"
+
+// Global libs, TODO: check if all are really needed globally
+#define GLEW_STATIC
+#include "GL/glew.h"
+#include <GLFW/glfw3.h>
+#include <GLFW/glfw3native.h>
+#include <Eigen\Dense> // TODO: do we REALLY need more than core?
+
+
 #include "scripting\scriptmanager.h"
 #include "content\assetmanager.h"
 

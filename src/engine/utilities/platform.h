@@ -23,10 +23,24 @@ along with this program.If not, see <http://www.gnu.org/licenses/
 #if (defined(WIN32)) // The project target is currently only 32bit.
 #define PLATFORM_OS_WIN
 #define WIN32_LEAN_AND_MEAN
+#include <Windows.h>
 #elif (defined(__APPLE__))
 #define PLATFORM_OS_OSX
 #else // Any other target is presumed to be linux/unix for now.
 #define PLATFORM_OS_LINUX
+#endif
+
+
+// GLFW definitions for exposing native window handles for OVR
+#if defined(PLATFORM_OS_WIN)
+#define GLFW_EXPOSE_NATIVE_WIN32
+#define GLFW_EXPOSE_NATIVE_WGL
+#elif defined(PLATFORM_OS_OSX)
+#define GLFW_EXPOSE_NATIVE_COCOA
+#define GLFW_EXPOSE_NATIVE_NSGL
+#elif defined(PLATFORM_OS_LINUX)
+#define GLFW_EXPOSE_NATIVE_X11
+#define GLFW_EXPOSE_NATIVE_GLX
 #endif
 
 

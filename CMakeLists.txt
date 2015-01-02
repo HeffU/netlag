@@ -93,7 +93,7 @@ set(FOUNDATION_INCLUDE_DIR ${CMAKE_CURRENT_SOURCE_DIR}/libs/foundation
 	CACHE PATH "Bitsquid foundation library include files path" )
 	
 # Eigen
-set(EIGEN_INCLUDE_DIR ${CMAKE_CURRENT_SOURCE_DIR}/libs/eigen/Eigen
+set(EIGEN_INCLUDE_DIR ${CMAKE_CURRENT_SOURCE_DIR}/libs/eigen
 	CACHE PATH "Eigen library include files path" )
 	
 ###########################################################
@@ -145,7 +145,7 @@ target_link_libraries(NetLag
 #
 
 set(_definitions 
-	GLEW_STATIC
+	NETLAG_USE_OVR
 )
 
 set_target_properties(NetLag PROPERTIES

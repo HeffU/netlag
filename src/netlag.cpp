@@ -23,7 +23,6 @@ along with this program.If not, see <http://www.gnu.org/licenses/
 using namespace netlag;
 
 #ifdef PLATFORM_OS_WIN
-#include <Windows.h>
 //int __stdcall WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int nCmdShow)
 // Use the above once the project has its own logging / console. Switch subsystem to Win32 only.
 int main(int argc, char ** argv)
