@@ -45,9 +45,11 @@ namespace netlag
 		int Run();
 
 	private:
-		
+
 		AssetManager* _assetMgr;
 		ScriptManager* _scriptMgr;
 		foundation::Allocator *_mainAlloc;
+
+		GLFWwindow* _window;
 	};
 }

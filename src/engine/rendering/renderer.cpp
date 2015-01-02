@@ -17,3 +17,18 @@ along with this program.If not, see <http://www.gnu.org/licenses/
 ***********************************************************************
 *	renderer.cpp - Renderer implementaion
 **********************************************************************/
+#include "renderer.h"
+
+using namespace netlag;
+using namespace foundation;
+
+Renderer::Renderer(Allocator* alloc)
+	:_alloc(alloc)
+{
+
+}
+
+Renderer::~Renderer()
+{
+
+}

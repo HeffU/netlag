@@ -18,3 +18,20 @@ along with this program.If not, see <http://www.gnu.org/licenses/
 *	renderer.h - Renderer class definition
 **********************************************************************/
 #pragma once
+
+#include "..\engine.h"
+
+namespace netlag
+{
+	class Renderer
+	{
+	public:
+
+		Renderer(foundation::Allocator* alloc);
+		~Renderer();
+
+	private:
+
+		foundation::Allocator *_alloc;
+	};
+}
