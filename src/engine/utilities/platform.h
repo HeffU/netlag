@@ -15,27 +15,18 @@ GNU General Public License for more details.
 You should have received a copy of the GNU General Public License
 along with this program.If not, see <http://www.gnu.org/licenses/
 ***********************************************************************
-*	netlag.cpp - Entry point and bootstrapping
+*	platform.h - Information and setup for specific platforms
 **********************************************************************/
+#pragma once
 
-#include "engine\engine.h"
-#include "engine\utilities\platform.h"
-using namespace netlag;
-
-#ifdef PLATFORM_OS_WIN
-#include <Windows.h>
-//int __stdcall WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int nCmdShow)
-// Use the above once the project has its own logging / console. Switch subsystem to Win32 only.
-int main(int argc, char ** argv)
-#else
-int main(int argc, char ** argv)
+// Platform detection
+#if (defined(WIN32)) // The project target is currently only 32bit.
+#define PLATFORM_OS_WIN
+#define WIN32_LEAN_AND_MEAN
+#elif (defined(__APPLE__))
+#define PLATFORM_OS_OSX
+#else // Any other target is presumed to be linux/unix for now.
+#define PLATFORM_OS_LINUX
 #endif
-{
-	Engine* engine = new Engine();
-	engine->Initialize();
-	engine->Run();
-	engine->Cleanup();
-	delete engine;
 
-	return 0;
-}
+
