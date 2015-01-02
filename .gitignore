@@ -33,3 +33,4 @@ libs/glew/*
 libs/glfw/*
 libs/luajit/*
 libs/ovr/*
+libs/eigen/*
