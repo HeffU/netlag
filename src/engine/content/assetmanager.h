@@ -38,7 +38,9 @@ namespace netlag
 
 	private:
 		ds_func _loaders[asset_type::NUM_ASSET_TYPES];
+		ul_func _unloaders[asset_type::NUM_ASSET_TYPES];
 		int _loadAsset(char* path);
+		int _unloadAsset(char* path);
 
 		//TODO: Add support for loading compressed / compiled data etc.
 		

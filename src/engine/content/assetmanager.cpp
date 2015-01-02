@@ -37,6 +37,7 @@ AssetManager::AssetManager(Allocator* alloc)
 {
 	// Init functions and map extensions to types.
 	_loaders[0] = ds_luascript;
+	_unloaders[0] = ul_luascript;
 	hash::set(_assetExts, murmur_hash_64("lua", 3, 0), 0);
 
 	_loaders[1] = ds_scenedef;
@@ -66,7 +67,14 @@ int AssetManager::LoadFileList(Array<char*> list)
 
 int AssetManager::UnloadFileList(Array<char*> list)
 {
-	return 0;
+	int size = array::size(list);
+	int unloads = 0;
+	for (int n = 0; n < size; n++)
+	{
+		if (_unloadAsset(list[n]) == 0)
+			unloads++;
+	}
+	return unloads;
 }
 
 int AssetManager::_loadAsset(char* path)
@@ -114,6 +122,35 @@ int AssetManager::_loadAsset(char* path)
 	asset.asset = _loaders[type](asset, _alloc);
 	hash::set(_assets, asset.handle, asset);
 	return 0;
+}
+
+int AssetManager::_unloadAsset(char* path)
+{
+	int len = std::strlen(path);
+
+	asset_info asset;
+	asset.path = path;
+	asset.handle = murmur_hash_64(path, len, 0);
+
+	// Update refcount, unload if needed.
+	if (hash::has(_assets, asset.handle))
+	{
+		asset = hash::get(_assets, asset.handle, asset);
+		asset._refcount--;
+		if (asset._refcount <= 0)
+		{
+			hash::remove(_assets, asset.handle);
+			_unloaders[asset._type](asset);
+			return 0;
+		}
+		hash::set(_assets, asset.handle, asset);
+		return 1;
+	}
+	else
+	{
+		// asset was not even loaded to begin with!
+		return -1;
+	}
 }
 
 asset_info AssetManager::GetAsset(uint64_t handle)

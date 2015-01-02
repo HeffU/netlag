@@ -45,3 +45,19 @@ char* netlag::ds_dialog(asset_info info, Allocator* alloc)
 {
 	return nullptr;
 }
+
+
+char* netlag::ul_luascript(asset_info info)
+{
+	return nullptr;
+}
+
+char* netlag::ul_scenedef(asset_info info)
+{
+	return nullptr;
+}
+
+char* netlag::ul_dialog(asset_info info)
+{
+	return nullptr;
+}
