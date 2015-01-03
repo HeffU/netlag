@@ -19,10 +19,8 @@ along with this program.If not, see <http://www.gnu.org/licenses/
 **********************************************************************/
 #pragma once
 
-#include <collection_types.h>
 #include <thread>
 #include <mutex>
-#include "../content/asset_types.h"
 #include "../content/assetmanager.h"
 
 extern "C"

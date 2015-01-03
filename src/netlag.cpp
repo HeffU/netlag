@@ -19,7 +19,6 @@ along with this program.If not, see <http://www.gnu.org/licenses/
 **********************************************************************/
 
 #include "engine\engine.h"
-#include "engine\utilities\platform.h"
 using namespace netlag;
 
 #ifdef PLATFORM_OS_WIN

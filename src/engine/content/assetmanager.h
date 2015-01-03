@@ -18,8 +18,6 @@ along with this program.If not, see <http://www.gnu.org/licenses/
 *	assetmanager.h - AssetManager class definition
 **********************************************************************/
 #pragma once
-#include <collection_types.h>
-#include "asset_types.h"
 #include "asset_loaders.h"
 
 namespace netlag

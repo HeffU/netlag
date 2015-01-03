@@ -19,7 +19,6 @@ along with this program.If not, see <http://www.gnu.org/licenses/
 **********************************************************************/
 
 #include "assetmanager.h"
-#include "asset_loaders.h"
 #include "murmur_hash.h"
 #include "hash.h"
 
