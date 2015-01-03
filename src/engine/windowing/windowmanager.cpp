@@ -15,44 +15,22 @@ GNU General Public License for more details.
 You should have received a copy of the GNU General Public License
 along with this program.If not, see <http://www.gnu.org/licenses/
 ***********************************************************************
-*	engine.h - Engine class definition
+*	windowmanager.h - Windowmanager implementation
 **********************************************************************/
-#pragma once
 
-#include "utilities\platform.h"
-#include "memory_types.h"
+#include "windowmanager.h"
+#include "memory.h"
 
-// Global libs, TODO: check if all are really needed globally
-#define GLEW_STATIC
-#include "GL/glew.h"
-#include <GLFW/glfw3.h>
-#include <GLFW/glfw3native.h>
-#include <Eigen\Dense> // TODO: do we REALLY need more than core?
+using namespace netlag;
+using namespace foundation;
 
-namespace netlag
+WindowManager::WindowManager(Allocator* alloc)
+	:_alloc(alloc)
 {
-	// Forward declares:
-	class ScriptManager;
-	class AssetManager;
-	class GLRenderer;
 
-	class Engine
-	{
-	public:
+}
 
-		Engine();
-		~Engine();
-		int Initialize();
-		int Cleanup();
-		int Run();
+WindowManager::~WindowManager()
+{
 
-	private:
-
-		AssetManager* _assetMgr;
-		ScriptManager* _scriptMgr;
-		GLRenderer* _renderer;
-		foundation::Allocator *_mainAlloc;
-
-		GLFWwindow* _window;
-	};
 }

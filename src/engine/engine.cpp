@@ -22,6 +22,7 @@ along with this program.If not, see <http://www.gnu.org/licenses/
 #include "scripting\scriptmanager.h"
 #include "content\assetmanager.h"
 #include "rendering\renderer.h"
+#include "memory.h"
 
 // For temp tests:
 #include "array.h"

@@ -134,11 +134,15 @@ find_library(lib_luajit NAMES "lua51"
 find_library(lib_ovr NAMES "libovr"
 	PATHS ${OVR_LIBRARY_DIR} NO_DEFAULT_PATH)
 	
+# OpenGL
+find_package(OpenGL REQUIRED)
+	
 target_link_libraries(NetLag
 	${lib_glew} 
 	${lib_glfw} 
 	${lib_luajit}
-	${lib_ovr})
+	${lib_ovr}
+	${OPENGL_LIBRARIES})
 
 ###########################################################
 # Preprocessor Definitions
