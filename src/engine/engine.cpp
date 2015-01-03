@@ -22,6 +22,8 @@ along with this program.If not, see <http://www.gnu.org/licenses/
 #include "scripting\scriptmanager.h"
 #include "content\assetmanager.h"
 #include "rendering\renderer.h"
+#include "windowing\windowmanager.h"
+
 #include "memory.h"
 
 // For temp tests:
@@ -32,45 +34,27 @@ using namespace netlag;
 
 Engine::Engine()
 {
-	if (!glfwInit()) { // TODO: log / output errors.
-		exit(EXIT_FAILURE);
-	}
+	// Initialize memory allocators
+	foundation::memory_globals::init();
+	_mainAlloc = &foundation::memory_globals::default_allocator();
 }
 
 Engine::~Engine()
 {
-	glfwTerminate();
+	foundation::memory_globals::shutdown();
 }
 
 int Engine::Initialize()
 {
-	// Initialize memory allocators
-	foundation::memory_globals::init();
-	_mainAlloc = &foundation::memory_globals::default_allocator();
-
 	// Initialize asset loading
 	_assetMgr = new AssetManager(_mainAlloc);
 
 	// Initialize scripting
 	_scriptMgr = new ScriptManager(_mainAlloc, _assetMgr);
 
-	// Initialize the window
-	glfwWindowHint(GLFW_DEPTH_BITS, 16);
-	glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
-	glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
-	glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
-#ifdef PLATFORM_OS_OSX
-	// Quick fix for Mac
-	glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);
-#endif
-	_window = glfwCreateWindow(640, 480, "netlag", NULL, NULL);
-	if (!_window)
-	{
-		glfwTerminate();
-		exit(EXIT_FAILURE);
-	}
-
-	glfwMakeContextCurrent(_window);
+	// Initialize window management
+	_windowMgr = new WindowManager(_mainAlloc);
+	_windowMgr->Initialize();
 
 	glewExperimental = GL_TRUE;
 	GLenum err = glewInit();
@@ -104,14 +88,14 @@ int Engine::Run()
 	_assetMgr->UnloadFileList(list);
 	foundation::array::clear(list);
 
-	// Main running loop:
-	while (!glfwWindowShouldClose(_window))
+	_running = true;
+	// Main loop:
+	while (_running)
 	{
-
 		_renderer->Render();
 
-		glfwSwapBuffers(_window);
-		glfwPollEvents();
+		if (_windowMgr->Update() == -1)
+			_running = false;
 	}
 
 	return 0;
@@ -125,12 +109,11 @@ int Engine::Cleanup()
 	// Probably ought to migrate all memory allocations to custom allocs
 	// new / delete in the meantime for classes, malloc for PODs
 
-	glfwDestroyWindow(_window);
+	_windowMgr->Cleanup();
+	delete _windowMgr;
 
 	delete _assetMgr;
 	delete _scriptMgr;
-
-	foundation::memory_globals::shutdown();
 
 	return 0;
 }

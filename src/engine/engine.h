@@ -25,8 +25,6 @@ along with this program.If not, see <http://www.gnu.org/licenses/
 // Global libs, TODO: check if all are really needed globally
 #define GLEW_STATIC
 #include "GL/glew.h"
-#include <GLFW/glfw3.h>
-#include <GLFW/glfw3native.h>
 #include <Eigen\Dense> // TODO: do we REALLY need more than core?
 
 namespace netlag
@@ -35,6 +33,7 @@ namespace netlag
 	class ScriptManager;
 	class AssetManager;
 	class GLRenderer;
+	class WindowManager;
 
 	class Engine
 	{
@@ -48,11 +47,12 @@ namespace netlag
 
 	private:
 
+		bool _running;
+
 		AssetManager* _assetMgr;
 		ScriptManager* _scriptMgr;
 		GLRenderer* _renderer;
+		WindowManager* _windowMgr;
 		foundation::Allocator *_mainAlloc;
-
-		GLFWwindow* _window;
 	};
 }

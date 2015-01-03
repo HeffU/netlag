@@ -21,6 +21,8 @@ along with this program.If not, see <http://www.gnu.org/licenses/
 
 #include "memory_types.h"
 
+struct GLFWwindow;
+
 namespace netlag
 {
 
@@ -30,8 +32,14 @@ namespace netlag
 		WindowManager(foundation::Allocator* alloc);
 		~WindowManager();
 
+		int Update();
+
+		int Initialize();
+		int Cleanup();
+
 	private :
 
 		foundation::Allocator* _alloc;
+		GLFWwindow* _window;
 	};
 }

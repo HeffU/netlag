@@ -21,6 +21,10 @@ along with this program.If not, see <http://www.gnu.org/licenses/
 #include "windowmanager.h"
 #include "memory.h"
 
+#include "..\utilities\platform.h"
+#include <GLFW/glfw3.h>
+#include <GLFW/glfw3native.h>
+
 using namespace netlag;
 using namespace foundation;
 
@@ -33,4 +37,51 @@ WindowManager::WindowManager(Allocator* alloc)
 WindowManager::~WindowManager()
 {
 
+}
+
+int WindowManager::Initialize()
+{
+	if (!glfwInit()) { // TODO: log / output errors.
+		return -1;
+	}
+
+	// Initialize the window
+	glfwWindowHint(GLFW_DEPTH_BITS, 16);
+	glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
+	glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
+	glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
+#ifdef PLATFORM_OS_OSX
+	// Quick fix for Mac
+	glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);
+#endif
+	_window = glfwCreateWindow(640, 480, "netlag", NULL, NULL);
+	if (!_window)
+	{
+		glfwTerminate();
+		return -1;
+	}
+
+	glfwMakeContextCurrent(_window);
+
+	return 0;
+}
+
+int WindowManager::Cleanup()
+{
+	glfwDestroyWindow(_window);
+
+	glfwTerminate();
+
+	return 0;
+}
+
+int WindowManager::Update()
+{
+	if (glfwWindowShouldClose(_window))
+		return -1;
+
+	glfwSwapBuffers(_window);
+	glfwPollEvents();
+
+	return 0;
 }
