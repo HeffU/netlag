@@ -23,12 +23,14 @@ along with this program.If not, see <http://www.gnu.org/licenses/
 
 namespace netlag
 {
-	class Renderer
+	class GLRenderer
 	{
 	public:
 
-		Renderer(foundation::Allocator* alloc);
-		~Renderer();
+		GLRenderer(foundation::Allocator* alloc);
+		~GLRenderer();
+
+		int Render();
 
 	private:
 
