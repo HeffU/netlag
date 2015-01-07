@@ -19,30 +19,12 @@ along with this program.If not, see <http://www.gnu.org/licenses/
 **********************************************************************/
 
 #include "inputmanager.h"
-#include "memory.h"
 
 #include "..\utilities\platform.h"
 #include <GLFW/glfw3.h>
 #include <GLFW/glfw3native.h>
 
 using namespace netlag;
-using namespace foundation;
-
-InputManager::InputManager(Allocator* alloc)
-	:_alloc(alloc)
-{
-	_instance = this;
-}
-
-InputManager::~InputManager()
-{
-
-}
-
-InputManager* InputManager::GetInstance()
-{
-	return _instance;
-}
 
 int InputManager::Initialize(GLFWwindow* window)
 {
@@ -89,8 +71,9 @@ void InputManager::ScrollCallback
 }
 
 void InputManager::KeyPressCallback
-	(GLFWwindow* window, int button, int scancode, 
+	(GLFWwindow* window, int key, int scancode, 
 									int action, int mods)
 {
-
+	if (key == GLFW_KEY_ESCAPE && action == GLFW_PRESS)
+		glfwSetWindowShouldClose(window, GL_TRUE);
 }

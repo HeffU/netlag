@@ -19,8 +19,6 @@ along with this program.If not, see <http://www.gnu.org/licenses/
 **********************************************************************/
 #pragma once
 
-#include "memory_types.h"
-
 struct GLFWwindow;
 
 namespace netlag
@@ -28,16 +26,22 @@ namespace netlag
 
 	class InputManager
 	{
-	public :
-		InputManager(foundation::Allocator* alloc);
-		~InputManager();
+	public:
+		InputManager() {}
+		~InputManager() {}
 
 		int Update();
 
 		int Initialize(GLFWwindow* window);
 		int Cleanup(GLFWwindow* window);
 
-		static InputManager* GetInstance();
+		static InputManager& GetInstance()
+		{
+			static InputManager _instance;
+			return _instance;
+		}
+		InputManager(InputManager const&);
+		void operator=(InputManager const&);
 
 		static void MouseButtonCallback
 			(GLFWwindow* window, int button, int action, int mods);
@@ -46,14 +50,10 @@ namespace netlag
 		static void ScrollCallback
 			(GLFWwindow* window, double xoffset, double yoffset);
 		static void KeyPressCallback
-			(GLFWwindow* window, int button, int scancode, 
+			(GLFWwindow* window, int key, int scancode, 
 											int action, int mods);
 
 	private :
 
-		static InputManager* _instance;
-
-		foundation::Allocator* _alloc;
-		
 	};
 }
