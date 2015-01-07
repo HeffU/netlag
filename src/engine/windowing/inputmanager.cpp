@@ -15,10 +15,10 @@ GNU General Public License for more details.
 You should have received a copy of the GNU General Public License
 along with this program.If not, see <http://www.gnu.org/licenses/
 ***********************************************************************
-*	windowmanager.h - Windowmanager implementation
+*	inputmanager.h - Inputmanager implementation
 **********************************************************************/
 
-#include "windowmanager.h"
+#include "inputmanager.h"
 #include "memory.h"
 
 #include "..\utilities\platform.h"
@@ -28,61 +28,69 @@ along with this program.If not, see <http://www.gnu.org/licenses/
 using namespace netlag;
 using namespace foundation;
 
-WindowManager::WindowManager(Allocator* alloc)
+InputManager::InputManager(Allocator* alloc)
 	:_alloc(alloc)
 {
-
+	_instance = this;
 }
 
-WindowManager::~WindowManager()
+InputManager::~InputManager()
 {
 
 }
 
-int WindowManager::Initialize()
+InputManager* InputManager::GetInstance()
 {
-	if (!glfwInit()) { // TODO: log / output errors.
-		return -1;
-	}
+	return _instance;
+}
 
-	// TODO: move window creation to its own function,
-	// makes more sense and could support more windows.
-	// Initialize the window
-	glfwWindowHint(GLFW_DEPTH_BITS, 16);
-	glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
-	glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
-	glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
-#ifdef PLATFORM_OS_OSX
-	// Quick fix for Mac
-	glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);
-#endif
-	_window = glfwCreateWindow(640, 480, "netlag", NULL, NULL);
-	if (!_window)
-	{
-		glfwTerminate();
-		return -1;
-	}
+int InputManager::Initialize(GLFWwindow* window)
+{
+	// TODO: make input window specific, store inputs in a hash
+	// containing the windows or something like that.
 
-	glfwMakeContextCurrent(_window);
+	glfwSetMouseButtonCallback(window, MouseButtonCallback);
+	glfwSetCursorPosCallback(window, CursorPositionCallback);
+	glfwSetScrollCallback(window, ScrollCallback);
+	glfwSetKeyCallback(window, KeyPressCallback);
 
 	return 0;
 }
 
-int WindowManager::Cleanup()
+int InputManager::Cleanup(GLFWwindow* window)
 {
-	glfwDestroyWindow(_window);
-
-	glfwTerminate();
 
 	return 0;
 }
 
-int WindowManager::Update()
+int InputManager::Update()
 {
-	if (glfwWindowShouldClose(_window))
-		return -1;
-
-	glfwSwapBuffers(_window);
+	glfwPollEvents();
 
 	return 0;
+}
+
+void InputManager::MouseButtonCallback
+	(GLFWwindow* window, int button, int action, int mods)
+{
+
+}
+
+void InputManager::CursorPositionCallback
+	(GLFWwindow* window, double xpos, double ypos)
+{
+
+}
+
+void InputManager::ScrollCallback
+	(GLFWwindow* window, double xoffset, double yoffset)
+{
+
+}
+
+void InputManager::KeyPressCallback
+	(GLFWwindow* window, int button, int scancode, 
+									int action, int mods)
+{
+
 }
