@@ -23,7 +23,6 @@ along with this program.If not, see <http://www.gnu.org/licenses/
 #include "array.h"
 #include "hash.h"
 
-#include <iostream>
 #include "..\utilities\hashing.h"
 #include "..\utilities\logging.h"
 
