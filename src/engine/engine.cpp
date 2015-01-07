@@ -24,6 +24,7 @@ along with this program.If not, see <http://www.gnu.org/licenses/
 #include "rendering\renderer.h"
 #include "windowing\windowmanager.h"
 #include "windowing\inputmanager.h"
+#include "utilities\logging.h"
 
 #include "memory.h"
 
@@ -35,6 +36,7 @@ using namespace netlag;
 
 Engine::Engine()
 {
+	utilities::log_start();
 	// Initialize memory allocators
 	foundation::memory_globals::init();
 	_mainAlloc = &foundation::memory_globals::default_allocator();
@@ -43,6 +45,8 @@ Engine::Engine()
 Engine::~Engine()
 {
 	foundation::memory_globals::shutdown();
+
+	utilities::log_stop();
 }
 
 int Engine::Initialize()
@@ -94,6 +98,8 @@ int Engine::Run()
 	foundation::array::clear(list);
 
 	_running = true;
+
+
 	// Main loop:
 	while (_running)
 	{
