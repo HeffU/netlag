@@ -24,7 +24,6 @@ along with this program.If not, see <http://www.gnu.org/licenses/
 #include "rendering\renderer.h"
 #include "windowing\windowmanager.h"
 #include "windowing\inputmanager.h"
-#include "utilities\logging.h"
 
 #include "memory.h"
 
@@ -71,7 +70,8 @@ int Engine::Initialize()
 	if (GLEW_OK != err)
 	{
 		/* Problem: glewInit failed, something is seriously wrong. */
-		fprintf(stderr, "Error: %s\n", glewGetErrorString(err));
+		utilities::log("[ENGINE] GLEW Error: %s", 
+			glewGetErrorString(err));
 		return EXIT_FAILURE;
 	}
 

@@ -21,6 +21,7 @@ along with this program.If not, see <http://www.gnu.org/licenses/
 #include "assetmanager.h"
 #include "murmur_hash.h"
 #include "hash.h"
+#include "..\utilities\logging.h"
 
 #include <cstdio>
 #include <sys/types.h>
@@ -110,13 +111,19 @@ int AssetManager::_loadAsset(char* path)
 	asset.filesize = st.st_size;
 	FILE* file = fopen(path, "r");
 	if (file == NULL)
+	{
+		utilities::log("[ASSET] Error: Could not open file.");
 		return -1; // error handling..
+	}
 
 	// Get the extensions handle and validate that its proper
 	uint64_t typehandle = murmur_hash_64(&path[(len - 3)], 3, 0);
 	int type = hash::get(_assetExts, typehandle, -1);
 	if (type == -1)
+	{
+		utilities::log("[ASSET] Error: Invalid asset type.");
 		return -2; // err
+	}
 	asset._type = (asset_type)type;
 
 	// alloc memory for the file, read and close.
@@ -159,6 +166,8 @@ int AssetManager::_unloadAsset(char* path)
 	}
 	else
 	{
+		utilities::log(
+			"[ASSET] Error: Tried to remove non-existing asset.");
 		// asset was not even loaded to begin with!
 		return -1;
 	}

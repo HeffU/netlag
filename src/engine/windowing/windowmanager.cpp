@@ -21,6 +21,7 @@ along with this program.If not, see <http://www.gnu.org/licenses/
 #include "windowmanager.h"
 #include "inputmanager.h"
 #include "memory.h"
+#include "..\utilities\logging.h"
 
 #include "..\utilities\platform.h"
 #include <GLFW/glfw3.h>
@@ -60,6 +61,7 @@ int WindowManager::Initialize()
 	_window = glfwCreateWindow(640, 480, "netlag", NULL, NULL);
 	if (!_window)
 	{
+		utilities::log("[WINDOW] Error: Failed to create window.");
 		glfwTerminate();
 		return -1;
 	}

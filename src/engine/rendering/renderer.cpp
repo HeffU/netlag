@@ -33,8 +33,8 @@ GLRenderer::GLRenderer(Allocator* alloc)
 	// get version info
 	const GLubyte* renderer = glGetString(GL_RENDERER); // get renderer string
 	const GLubyte* version = glGetString(GL_VERSION); // version as a string
-	printf("Renderer: %s\n", renderer);
-	printf("OpenGL version supported %s\n", version);
+	utilities::log("[RENDERER] Renderer: %s\n", renderer);
+	utilities::log("[RENDERER] OpenGL version supported %s\n", version);
 
 	glEnable(GL_DEPTH_TEST); // enable depth-testing
 	glDepthFunc(GL_LESS); // depth-testing interprets a smaller value as "closer"

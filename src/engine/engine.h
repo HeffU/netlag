@@ -20,6 +20,7 @@ along with this program.If not, see <http://www.gnu.org/licenses/
 #pragma once
 
 #include "utilities\platform.h"
+#include "utilities\logging.h"
 #include "memory_types.h"
 
 // Global libs, TODO: check if all are really needed globally

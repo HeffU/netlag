@@ -25,6 +25,7 @@ along with this program.If not, see <http://www.gnu.org/licenses/
 
 #include <iostream>
 #include "..\utilities\hashing.h"
+#include "..\utilities\logging.h"
 
 extern "C"
 {
@@ -88,11 +89,17 @@ bool ScriptManager::StateAvailable(unsigned int state_id)
 int ScriptManager::RunScript(uint64_t handle, int state_id)
 {
 	if (!StateAvailable(state_id))
+	{
+		utilities::log("[SCRIPT] Error: State not available!");
 		return -1; // fix returns, error handling etc.
+	}
 	// Try to get the script from the assetmanager
 	asset_info info = _assetMgr->GetAsset(handle);
 	if (info._type == INVALID)
+	{
+		utilities::log("[SCRIPT] Error: Script does not exist!");
 		return -2; // fix, this means the script doesnt exist in the manager
+	}
 	luascript* script = (luascript*)info.asset;
 
 	luaenv env = _envs[state_id];
@@ -103,7 +110,10 @@ int ScriptManager::RunScript(uint64_t handle, int state_id)
 int ScriptManager::RunString(char* lua, int state_id)
 {
 	if (!StateAvailable(state_id))
-		return -1; // err
+	{
+		utilities::log("[SCRIPT] Error: State not available!");
+		return -1; // fix returns, error handling etc.
+	}
 
 	luascript script;
 	script.chunkname = "temp";
@@ -123,18 +133,21 @@ int ScriptManager::_runLua(luaenv env, luascript script)
 	if (err == LUA_ERRSYNTAX)
 	{
 		//fix errorhandling
-		std::cout << "-- " << lua_tostring(env.state, -1) << std::endl;
+		utilities::log("[SCRIPT] Syntax Error: %s", lua_tostring(env.state, -1));
 	}
 	else if (err == LUA_ERRMEM)
 	{
 		//fix errorhandling
-		std::cout << "ERROR: Lua could not allocate memory, either too low or wrong placement.\n";
+		utilities::log("[SCRIPT] Error: Lua could not allocate memory, either too low or wrong placement.");
 	}
 	err = lua_pcall(env.state, 0, 0, 0);
+
+#ifdef NETLAG_DEBUG
 	if (err != 0)
 	{
-		std::cout << "-- " << lua_tostring(env.state, -1) << std::endl;
+		utilities::log("[SCRIPT] Lua output: %s", lua_tostring(env.state, -1));
 	}
+#endif
 
 	env.mutex->unlock();
 	return 0;
@@ -157,10 +170,12 @@ extern "C" int get_packaged_module(lua_State *state)
 		int err = luaL_loadbuffer(state, script.data, script.size, script.chunkname);
 		if (err == LUA_ERRSYNTAX)
 		{
+			utilities::log("[SCRIPT] Syntax Error: %s", lua_tostring(state, -1));
 			//fix errorhandling
 		}
 		else if (err == LUA_ERRMEM)
 		{
+			utilities::log("[SCRIPT] Error: Lua could not allocate memory, either too low or wrong placement.");
 			//fix errorhandling
 		}
 	}
