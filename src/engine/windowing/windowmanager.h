@@ -35,6 +35,7 @@ namespace netlag
 		int Update();
 
 		int Initialize();
+		int InitializeInput();
 		int Cleanup();
 
 	private :

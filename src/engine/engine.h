@@ -34,6 +34,7 @@ namespace netlag
 	class AssetManager;
 	class GLRenderer;
 	class WindowManager;
+	class InputManager;
 
 	class Engine
 	{
@@ -53,6 +54,7 @@ namespace netlag
 		ScriptManager* _scriptMgr;
 		GLRenderer* _renderer;
 		WindowManager* _windowMgr;
+		InputManager* _inputMgr;
 		foundation::Allocator *_mainAlloc;
 	};
 }

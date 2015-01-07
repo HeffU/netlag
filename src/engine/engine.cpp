@@ -23,6 +23,7 @@ along with this program.If not, see <http://www.gnu.org/licenses/
 #include "content\assetmanager.h"
 #include "rendering\renderer.h"
 #include "windowing\windowmanager.h"
+#include "windowing\inputmanager.h"
 
 #include "memory.h"
 
@@ -55,6 +56,10 @@ int Engine::Initialize()
 	// Initialize window management
 	_windowMgr = new WindowManager(_mainAlloc);
 	_windowMgr->Initialize();
+
+	// Initialize window input
+	_inputMgr = &InputManager::GetInstance();
+	_windowMgr->InitializeInput();
 
 	glewExperimental = GL_TRUE;
 	GLenum err = glewInit();
@@ -94,6 +99,7 @@ int Engine::Run()
 	{
 		_renderer->Render();
 
+		_inputMgr->Update();
 		if (_windowMgr->Update() == -1)
 			_running = false;
 	}

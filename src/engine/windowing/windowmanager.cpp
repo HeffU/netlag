@@ -19,6 +19,7 @@ along with this program.If not, see <http://www.gnu.org/licenses/
 **********************************************************************/
 
 #include "windowmanager.h"
+#include "inputmanager.h"
 #include "memory.h"
 
 #include "..\utilities\platform.h"
@@ -65,6 +66,13 @@ int WindowManager::Initialize()
 
 	glfwMakeContextCurrent(_window);
 
+	return 0;
+}
+
+int WindowManager::InitializeInput()
+{
+	InputManager::GetInstance().Initialize(_window);
+	
 	return 0;
 }
 
