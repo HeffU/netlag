@@ -15,7 +15,7 @@ GNU General Public License for more details.
 You should have received a copy of the GNU General Public License
 along with this program.If not, see <http://www.gnu.org/licenses/
 ***********************************************************************
-*	hashing.h - Various hashing functions
+*	logging.h - Various logging functions
 **********************************************************************/
 #pragma once
 
@@ -30,6 +30,8 @@ along with this program.If not, see <http://www.gnu.org/licenses/
 char logfile[50];
 std::mutex mutex;
 
+// Blocks on multithreaded access, might cause slowdowns
+// but allows us to log from lua.
 int log_internal(const char* message, va_list argptr)
 {
 	mutex.lock();
