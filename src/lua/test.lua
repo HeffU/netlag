@@ -33,6 +33,12 @@ unsigned long long hash_murmur64
 ]]
 print("murmur64('lua'): ", ffi.C.hash_murmur64("lua", 3))
 
+print("Testing logging system..")
+ffi.cdef[[
+int log_write(const char* message, ...);
+]]
+ffi.C.log_write("[LUA] %s!\n", "log test")
+
 print("Testing done.")
 
 
