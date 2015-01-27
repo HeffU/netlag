@@ -133,3 +133,9 @@ GLuint ShaderManager::_compileProgram
 
 	return shader_program;
 }
+
+ShaderProgram ShaderManager::GetProgram(uint64_t handle)
+{
+	ShaderProgram program;
+	return hash::get<ShaderProgram>(_shaders, handle, program);
+}

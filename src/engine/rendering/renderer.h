@@ -24,17 +24,20 @@ along with this program.If not, see <http://www.gnu.org/licenses/
 
 namespace netlag
 {
+	class ShaderManager;
+
 	class GLRenderer
 	{
 	public:
 
-		GLRenderer(foundation::Allocator* alloc);
+		GLRenderer(foundation::Allocator* alloc, ShaderManager* shaders);
 		~GLRenderer();
 
 		int Render();
 
 	private:
 
+		ShaderManager* _shaderMgr;
 		foundation::Allocator *_alloc;
 	};
 }

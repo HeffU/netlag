@@ -22,6 +22,7 @@ along with this program.If not, see <http://www.gnu.org/licenses/
 #include "scripting\scriptmanager.h"
 #include "content\assetmanager.h"
 #include "rendering\renderer.h"
+#include "rendering\shadermanager.h"
 #include "windowing\windowmanager.h"
 #include "windowing\inputmanager.h"
 
@@ -75,7 +76,11 @@ int Engine::Initialize()
 		return EXIT_FAILURE;
 	}
 
-	_renderer = new GLRenderer(_mainAlloc);
+	// Initialize shaders
+	_shaderMgr = new ShaderManager(_mainAlloc);
+
+	// Initialize rendering
+	_renderer = new GLRenderer(_mainAlloc, _shaderMgr);
 
 	return 0;
 }
@@ -126,6 +131,8 @@ int Engine::Cleanup()
 
 	delete _assetMgr;
 	delete _scriptMgr;
+
+	delete _shaderMgr;
 
 	return 0;
 }

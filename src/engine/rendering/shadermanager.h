@@ -36,6 +36,7 @@ namespace netlag
 		uint64_t CreateProgram(uint64_t vs, uint64_t gs, uint64_t fs);
 		void DestroyProgram(uint64_t program);
 		void RecompileProgram(uint64_t program);
+		ShaderProgram GetProgram(uint64_t program);
 
 	private:
 
