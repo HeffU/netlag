@@ -20,6 +20,7 @@ along with this program.If not, see <http://www.gnu.org/licenses/
 #pragma once
 
 #include "..\engine.h"
+#include "collection_types.h"
 
 namespace netlag
 {

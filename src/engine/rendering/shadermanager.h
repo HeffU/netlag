@@ -15,47 +15,34 @@ GNU General Public License for more details.
 You should have received a copy of the GNU General Public License
 along with this program.If not, see <http://www.gnu.org/licenses/
 ***********************************************************************
-*	engine.h - Engine class definition
+*	shadermanager.h - Shadermanager class definition
 **********************************************************************/
 #pragma once
 
-#include "utilities\platform.h"
-#include "utilities\logging.h"
-#include "memory_types.h"
-
-// Global libs, TODO: check if all are really needed globally
-#define GLEW_STATIC
-#include "GL/glew.h"
-#include <Eigen\Core> // TODO: do we REALLY need more than core?
+#include "..\engine.h"
+#include "collection_types.h"
+#include "rendertypes.h"
 
 namespace netlag
 {
-	// Forward declares:
-	class ScriptManager;
-	class AssetManager;
-	class GLRenderer;
-	class WindowManager;
-	class InputManager;
 
-	class Engine
+	class ShaderManager
 	{
 	public:
 
-		Engine();
-		~Engine();
-		int Initialize();
-		int Cleanup();
-		int Run();
+		ShaderManager(foundation::Allocator* alloc);
+		~ShaderManager();
+
+		uint64_t CreateProgram(uint64_t vs, uint64_t gs, uint64_t fs);
+		void DestroyProgram(uint64_t program);
+		void RecompileProgram(uint64_t program);
 
 	private:
 
-		bool _running;
+		GLuint _compileProgram
+			(const char* vs, const char* gs, const char* fs);
 
-		AssetManager* _assetMgr;
-		ScriptManager* _scriptMgr;
-		GLRenderer* _renderer;
-		WindowManager* _windowMgr;
-		InputManager* _inputMgr;
-		foundation::Allocator *_mainAlloc;
+		foundation::Allocator *_alloc;
+		foundation::Hash<ShaderProgram> _shaders;
 	};
 }
