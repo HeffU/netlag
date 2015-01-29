@@ -32,13 +32,17 @@ namespace netlag
 	char* ds_luascript(asset_info info, foundation::Allocator* alloc);
 	// Deserializer for a scene defenition file.
 	char* ds_scenedef(asset_info info, foundation::Allocator* alloc);
-	// Deserializer for a dialo file.
+	// Deserializer for a dialog file.
 	char* ds_dialog(asset_info info, foundation::Allocator* alloc);
+	// Deserializer for text files
+	char* ds_textfile(asset_info info, foundation::Allocator* alloc);
 
 	// Cleanup for lua script files.
 	int ul_luascript(asset_info info, foundation::Allocator* alloc);
 	// Cleanup for a scene defenition file.
 	int ul_scenedef(asset_info info, foundation::Allocator* alloc);
-	// Cleanup for a dialo file.
+	// Cleanup for a dialog file.
 	int ul_dialog(asset_info info, foundation::Allocator* alloc);
+	// Cleanup for text files
+	int ul_textfile(asset_info info, foundation::Allocator* alloc);
 }

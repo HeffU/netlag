@@ -36,15 +36,35 @@ AssetManager::AssetManager(Allocator* alloc)
 	_assetExts(Hash<int>(*alloc))
 {
 	// Init functions and map extensions to types.
-	_loaders[0] = ds_luascript;
-	_unloaders[0] = ul_luascript;
-	hash::set(_assetExts, murmur_hash_64("lua", 3, 0), 0);
+	_loaders[LUA_SCRIPT] = ds_luascript;
+	_unloaders[LUA_SCRIPT] = ul_luascript;
+	hash::set(_assetExts, 
+		murmur_hash_64("lua", 3, 0), (int)LUA_SCRIPT);
 
-	_loaders[1] = ds_scenedef;
-	hash::set(_assetExts, murmur_hash_64("sce", 3, 0), 1);
+	_loaders[SCENE_DEFENITION] = ds_scenedef;
+	_unloaders[SCENE_DEFENITION] = ul_scenedef;
+	hash::set(_assetExts, 
+		murmur_hash_64("sce", 3, 0), (int)SCENE_DEFENITION);
 
-	_loaders[2] = ds_dialog;
-	hash::set(_assetExts, murmur_hash_64("dia", 3, 0), 2);
+	_loaders[DIALOG] = ds_dialog;
+	_unloaders[DIALOG] = ul_dialog;
+	hash::set(_assetExts, 
+		murmur_hash_64("dia", 3, 0), (int)DIALOG);
+
+	_loaders[VERTEX_SHADER] = ds_textfile;
+	_unloaders[VERTEX_SHADER] = ul_textfile;
+	hash::set(_assetExts,
+		murmur_hash_64("vs", 3, 0), (int)VERTEX_SHADER);
+
+	_loaders[GEOMETRY_SHADER] = ds_textfile;
+	_unloaders[GEOMETRY_SHADER] = ul_textfile;
+	hash::set(_assetExts,
+		murmur_hash_64("gs", 3, 0), (int)GEOMETRY_SHADER);
+
+	_loaders[FRAGMENT_SHADER] = ds_textfile;
+	_unloaders[FRAGMENT_SHADER] = ul_textfile;
+	hash::set(_assetExts,
+		murmur_hash_64("fs", 3, 0), (int)FRAGMENT_SHADER);
 }
 
 AssetManager::~AssetManager()

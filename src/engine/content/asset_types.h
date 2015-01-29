@@ -33,6 +33,11 @@ namespace netlag
 		// dialog
 		DIALOG,
 
+		// shaders
+		VERTEX_SHADER,
+		GEOMETRY_SHADER,
+		FRAGMENT_SHADER,
+
 		// misc
 		INVALID,
 		NUM_ASSET_TYPES
