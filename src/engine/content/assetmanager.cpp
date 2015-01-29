@@ -54,17 +54,17 @@ AssetManager::AssetManager(Allocator* alloc)
 	_loaders[VERTEX_SHADER] = ds_textfile;
 	_unloaders[VERTEX_SHADER] = ul_textfile;
 	hash::set(_assetExts,
-		murmur_hash_64("vs", 3, 0), (int)VERTEX_SHADER);
+		murmur_hash_64("vsh", 3, 0), (int)VERTEX_SHADER);
 
 	_loaders[GEOMETRY_SHADER] = ds_textfile;
 	_unloaders[GEOMETRY_SHADER] = ul_textfile;
 	hash::set(_assetExts,
-		murmur_hash_64("gs", 3, 0), (int)GEOMETRY_SHADER);
+		murmur_hash_64("gsh", 3, 0), (int)GEOMETRY_SHADER);
 
 	_loaders[FRAGMENT_SHADER] = ds_textfile;
 	_unloaders[FRAGMENT_SHADER] = ul_textfile;
 	hash::set(_assetExts,
-		murmur_hash_64("fs", 3, 0), (int)FRAGMENT_SHADER);
+		murmur_hash_64("fsh", 3, 0), (int)FRAGMENT_SHADER);
 }
 
 AssetManager::~AssetManager()
@@ -177,8 +177,8 @@ int AssetManager::_unloadAsset(char* path)
 		asset._refcount--;
 		if (asset._refcount <= 0)
 		{
-			hash::remove(_assets, asset.handle);
 			_unloaders[asset._type](asset, _alloc);
+			hash::remove(_assets, asset.handle);
 			return 0;
 		}
 		hash::set(_assets, asset.handle, asset);

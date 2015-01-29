@@ -26,6 +26,8 @@ along with this program.If not, see <http://www.gnu.org/licenses/
 #include "..\utilities\hashing.h"
 #include "..\utilities\logging.h"
 
+#include "../content/assetmanager.h"
+
 extern "C"
 {
 #include <lauxlib.h>

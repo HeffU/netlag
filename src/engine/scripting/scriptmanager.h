@@ -21,7 +21,7 @@ along with this program.If not, see <http://www.gnu.org/licenses/
 
 #include <thread>
 #include <mutex>
-#include "../content/assetmanager.h"
+#include "..\content\asset_types.h"
 
 extern "C"
 {
@@ -30,6 +30,8 @@ extern "C"
 
 namespace netlag
 {
+	class AssetManager;
+
 	struct luaenv
 	{
 		lua_State* state = nullptr;

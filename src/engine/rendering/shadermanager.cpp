@@ -21,50 +21,49 @@ along with this program.If not, see <http://www.gnu.org/licenses/
 #include "array.h"
 #include "hash.h"
 
+#include "../content/assetmanager.h"
+
 using namespace netlag;
 using namespace foundation;
 
 
-ShaderManager::ShaderManager(Allocator* alloc)
+ShaderManager::ShaderManager(Allocator* alloc, AssetManager* assetMgr)
 	:_alloc(alloc),
-	_shaders(Hash<ShaderProgram>(*alloc))
+	_shaders(Hash<ShaderProgram>(*alloc)),
+	_assetMgr(assetMgr)
 {
 
 }
 
 ShaderManager::~ShaderManager()
 {
-
+	if (array::size(_shaders._data) > 0)
+	{
+		uint64_t shader = hash::begin(_shaders)->key;
+		uint32_t next = 0;
+		while (next != -1)
+		{
+			DestroyProgram(shader);
+			next = _shaders._data[next].next;
+			shader = _shaders._data[next].key;
+		}
+	}
+	hash::clear(_shaders);
 }
 
 uint64_t ShaderManager::CreateProgram
 	(uint64_t vs, uint64_t gs, uint64_t fs)
 {
-	const char* vertex_shader =
-		"#version 400\n"
-		"in vec3 vp;"
-		"void main () {"
-		"  gl_Position = vec4 (vp, 1.0);"
-		"}";
-
-	const char* fragment_shader =
-		"#version 400\n"
-		"out vec4 frag_colour;"
-		"void main () {"
-		"  frag_colour = vec4 (0.5, 0.0, 0.5, 1.0);"
-		"}";
-
 	ShaderProgram program;
 	program.vs_src = vs;
 	program.gs_src = gs;
 	program.fs_src = fs;
 
-	//TODO: this obv should come from the arguments rather than hardcoded.
-	program.glProgram = _compileProgram(vertex_shader, 0, fragment_shader);
+	program.glProgram = _compileProgram(vs, gs, fs);
 
 	//TODO: init array obv
 
-	uint64_t id = 0;
+	uint64_t id = 1337;
 	//TODO: get a fresh ID, either from some ID util or from hash?
 	hash::set(_shaders, id, program);
 	return id;
@@ -98,38 +97,75 @@ void ShaderManager::RecompileProgram(uint64_t program)
 }
 
 GLuint ShaderManager::_compileProgram
-	(const char* vs, const char* gs, const char* fs)
+	(uint64_t vs, uint64_t gs, uint64_t fs)
 {
-	GLuint shader_program = glCreateProgram();
+	const char* vertex_shader =
+		"#version 400\n"
+		"in vec3 vp;"
+		"void main () {"
+		"  gl_Position = vec4 (vp, 1.0);"
+		"}";
 
-	if (fs != 0)
+	const char* fragment_shader =
+		"#version 400\n"
+		"out vec4 frag_colour;"
+		"void main () {"
+		"  frag_colour = vec4 (0.5, 0.0, 0.5, 1.0);"
+		"}";
+
+
+
+	GLuint shader_program = glCreateProgram();
+	GLuint _vs = 0;
+	GLuint _gs = 0;
+	GLuint _fs = 0;
+
+	// Try to get the sources
+	asset_info vsAsset = _assetMgr->GetAsset(vs);
+	asset_info gsAsset = _assetMgr->GetAsset(gs);
+	asset_info fsAsset = _assetMgr->GetAsset(fs);
+
+	if (vsAsset._type != INVALID)
 	{
-		GLuint _vs = glCreateShader(GL_VERTEX_SHADER);
-		glShaderSource(_vs, 1, &vs, NULL);
+		_vs = glCreateShader(GL_VERTEX_SHADER);
+		glShaderSource(_vs, 1, &vertex_shader, NULL);
 		glCompileShader(_vs);
 		glAttachShader(shader_program, _vs);
 	}
 
-	if (gs != 0)
+	if (gsAsset._type != INVALID)
 	{
-		// yaya.
-		GLuint _gs = glCreateShader(GL_GEOMETRY_SHADER);
-		glShaderSource(_gs, 1, &gs, NULL);
+		_gs = glCreateShader(GL_GEOMETRY_SHADER);
+		glShaderSource(_gs, 1, (const GLchar **)&gsAsset.asset, NULL);
 		glCompileShader(_gs);
 		glAttachShader(shader_program, _gs);
 	}
 
-	if (vs != 0)
+	if (fsAsset._type != INVALID)
 	{
-		GLuint _fs = glCreateShader(GL_FRAGMENT_SHADER);
-		glShaderSource(_fs, 1, &fs, NULL);
+		_fs = glCreateShader(GL_FRAGMENT_SHADER);
+		glShaderSource(_fs, 1, &fragment_shader, NULL);
 		glCompileShader(_fs);
 		glAttachShader(shader_program, _fs);
 	}
 
 	glLinkProgram(shader_program);
-	//glDetachShader()
-	//glDeleteShader()
+
+	if (_vs != 0)
+	{
+		glDetachShader(shader_program, _vs);
+		glDeleteShader(_vs);
+	}
+	if (_gs != 0)
+	{
+		glDetachShader(shader_program, _gs);
+		glDeleteShader(_gs);
+	}
+	if (_fs != 0)
+	{
+		glDetachShader(shader_program, _fs);
+		glDeleteShader(_fs);
+	}
 
 	return shader_program;
 }

@@ -59,9 +59,6 @@ GLRenderer::GLRenderer(Allocator* alloc, ShaderManager* shaders)
 	glBindBuffer(GL_ARRAY_BUFFER, vbo);
 	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, NULL);
 
-	uint64_t sp = _shaderMgr->CreateProgram(0, 0, 0);
-	shader_programme = _shaderMgr->GetProgram(sp).glProgram;
-
 }
 
 GLRenderer::~GLRenderer()
@@ -71,6 +68,8 @@ GLRenderer::~GLRenderer()
 
 int GLRenderer::Render()
 {
+	shader_programme = _shaderMgr->GetProgram(1337).glProgram;
+
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	glUseProgram(shader_programme);
 	glBindVertexArray(vao);

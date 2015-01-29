@@ -30,7 +30,7 @@ namespace netlag
 	{
 	public:
 
-		ShaderManager(foundation::Allocator* alloc);
+		ShaderManager(foundation::Allocator* alloc, AssetManager* assetMgr);
 		~ShaderManager();
 
 		uint64_t CreateProgram(uint64_t vs, uint64_t gs, uint64_t fs);
@@ -41,9 +41,10 @@ namespace netlag
 	private:
 
 		GLuint _compileProgram
-			(const char* vs, const char* gs, const char* fs);
+			(uint64_t, uint64_t gs, uint64_t fs);
 
 		foundation::Allocator *_alloc;
 		foundation::Hash<ShaderProgram> _shaders;
+		AssetManager* _assetMgr;
 	};
 }

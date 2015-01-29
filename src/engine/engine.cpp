@@ -77,7 +77,7 @@ int Engine::Initialize()
 	}
 
 	// Initialize shaders
-	_shaderMgr = new ShaderManager(_mainAlloc);
+	_shaderMgr = new ShaderManager(_mainAlloc, _assetMgr);
 
 	// Initialize rendering
 	_renderer = new GLRenderer(_mainAlloc, _shaderMgr);
@@ -89,8 +89,12 @@ int Engine::Run()
 {
 	// Temp tests.
 	char* path = "test.lua";
+	char* vs = "default.vsh";
+	char* fs = "default.fsh";
 	foundation::Array<char*> list(*_mainAlloc);
 	foundation::array::push_back(list, path);
+	foundation::array::push_back(list, vs);
+	foundation::array::push_back(list, fs);
 	_assetMgr->LoadFileList(list);
 	uint64_t handle = foundation::murmur_hash_64
 		(path, sizeof("test.lua")-1, 0);
@@ -99,6 +103,13 @@ int Engine::Run()
 
 	while (!_scriptMgr->StateAvailable(0));
 
+	uint64_t h_vs = handle = foundation::murmur_hash_64
+		(vs, sizeof("default.vsh") - 1, 0);
+	uint64_t h_fs = handle = foundation::murmur_hash_64
+		(fs, sizeof("default.fsh") - 1, 0);
+	uint64_t sp = _shaderMgr->CreateProgram(h_vs, 0, h_fs);
+
+	_assetMgr->UnloadFileList(list);
 	_assetMgr->UnloadFileList(list);
 	foundation::array::clear(list);
 
