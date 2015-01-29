@@ -48,6 +48,8 @@ char* netlag::ds_dialog(asset_info info, Allocator* alloc)
 
 char* netlag::ds_textfile(asset_info info, Allocator* alloc)
 {
+	char* string = (char*)info.asset;
+	string[info.filesize] = '\0';
 	return (char*)info.asset;
 }
 

@@ -110,7 +110,6 @@ int Engine::Run()
 	uint64_t sp = _shaderMgr->CreateProgram(h_vs, 0, h_fs);
 
 	_assetMgr->UnloadFileList(list);
-	_assetMgr->UnloadFileList(list);
 	foundation::array::clear(list);
 
 	_running = true;

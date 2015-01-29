@@ -147,7 +147,7 @@ int AssetManager::_loadAsset(char* path)
 	asset._type = (asset_type)type;
 
 	// alloc memory for the file, read and close.
-	asset.asset = (char*)_alloc->allocate(asset.filesize);
+	asset.asset = (char*)_alloc->allocate(asset.filesize + 1);
 	int bytesread = fread(asset.asset, 1, asset.filesize, file);
 	// Can't meaningfully check amount read as size is not correct.
 	//if ( bytesread != asset.filesize)

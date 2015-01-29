@@ -99,22 +99,6 @@ void ShaderManager::RecompileProgram(uint64_t program)
 GLuint ShaderManager::_compileProgram
 	(uint64_t vs, uint64_t gs, uint64_t fs)
 {
-	const char* vertex_shader =
-		"#version 400\n"
-		"in vec3 vp;"
-		"void main () {"
-		"  gl_Position = vec4 (vp, 1.0);"
-		"}";
-
-	const char* fragment_shader =
-		"#version 400\n"
-		"out vec4 frag_colour;"
-		"void main () {"
-		"  frag_colour = vec4 (0.5, 0.0, 0.5, 1.0);"
-		"}";
-
-
-
 	GLuint shader_program = glCreateProgram();
 	GLuint _vs = 0;
 	GLuint _gs = 0;
@@ -128,7 +112,7 @@ GLuint ShaderManager::_compileProgram
 	if (vsAsset._type != INVALID)
 	{
 		_vs = glCreateShader(GL_VERTEX_SHADER);
-		glShaderSource(_vs, 1, &vertex_shader, NULL);
+		glShaderSource(_vs, 1, (const GLchar **)&vsAsset.asset, NULL);
 		glCompileShader(_vs);
 		glAttachShader(shader_program, _vs);
 	}
@@ -144,7 +128,7 @@ GLuint ShaderManager::_compileProgram
 	if (fsAsset._type != INVALID)
 	{
 		_fs = glCreateShader(GL_FRAGMENT_SHADER);
-		glShaderSource(_fs, 1, &fragment_shader, NULL);
+		glShaderSource(_fs, 1, (const GLchar **)&fsAsset.asset, NULL);
 		glCompileShader(_fs);
 		glAttachShader(shader_program, _fs);
 	}
