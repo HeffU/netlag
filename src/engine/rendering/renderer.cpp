@@ -19,16 +19,16 @@ along with this program.If not, see <http://www.gnu.org/licenses/
 **********************************************************************/
 #include "renderer.h"
 #include "shadermanager.h"
+#include "hash.h"
+#include "array.h"
 
 using namespace netlag;
 using namespace foundation;
 
-GLuint shader_programme;
-GLuint vao;
-
 GLRenderer::GLRenderer(Allocator* alloc, ShaderManager* shaders)
 	:_alloc(alloc),
-	_shaderMgr(shaders)
+	_shaderMgr(shaders),
+	_instanceRenders(Hash<ShaderInstance>(*alloc))
 {
 	/******************************************/
 
@@ -40,41 +40,128 @@ GLRenderer::GLRenderer(Allocator* alloc, ShaderManager* shaders)
 
 	glEnable(GL_DEPTH_TEST); // enable depth-testing
 	glDepthFunc(GL_LESS); // depth-testing interprets a smaller value as "closer"
-
-	float points[] = {
-		0.0f, 0.5f, 0.0f,
-		0.5f, -0.5f, 0.0f,
-		-0.5f, -0.5f, 0.0f
-	};
-
-	GLuint vbo = 0;
-	glGenBuffers(1, &vbo);
-	glBindBuffer(GL_ARRAY_BUFFER, vbo);
-	glBufferData(GL_ARRAY_BUFFER, 9 * sizeof(float), points, GL_STATIC_DRAW);
-
-	vao = 0;
-	glGenVertexArrays(1, &vao);
-	glBindVertexArray(vao);
-	glEnableVertexAttribArray(0);
-	glBindBuffer(GL_ARRAY_BUFFER, vbo);
-	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, NULL);
-
 }
 
 GLRenderer::~GLRenderer()
 {
+	uint32_t next = 0;
+	int size = 0;
+	ShaderInstance inst;
+	ModelRenderDef def;
+	if (array::size(_instanceRenders._data) > 0)
+	{
+		inst = hash::begin(_instanceRenders)->value;
+		while (next != -1)
+		{
+			array::clear(*inst.renderDefs);
+			delete inst.renderDefs;
+			next = _instanceRenders._data[next].next;
+		}
+		hash::clear(_instanceRenders);
+	}
+}
 
+int GLRenderer::Initialize()
+{
+	/*float points[] = {
+	0.0f, 0.5f, 0.0f,
+	0.5f, -0.5f, 0.0f,
+	-0.5f, -0.5f, 0.0f
+	};*/
+
+	Eigen::Matrix3f verts;
+	verts <<
+		0.0f, 0.5f, -0.5f,
+		0.5f, -0.5f, -0.5f,
+		0.0f, 0.0f, 0.0f;
+
+	float posdata[] = {
+		0.0f, 0.0f, 0.0f,
+		0.0f, 0.3f, 0.0f
+	};
+
+	Eigen::Matrix<float, 2, 3> positions(posdata);
+
+	ModelRenderDef def;
+
+	glGenVertexArrays(1, &def.vao);
+	glBindVertexArray(def.vao);
+
+	// verts
+	glGenBuffers(1, &def.verts);
+	glBindBuffer(GL_ARRAY_BUFFER, def.verts);
+	glBufferData(GL_ARRAY_BUFFER, 9 * sizeof(verts.data()), verts.data(), GL_STATIC_DRAW);
+	glEnableVertexAttribArray(0);
+	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, NULL);
+
+	glGenBuffers(1, &def.vbo);
+	glBindBuffer(GL_ARRAY_BUFFER, def.vbo);
+	glBufferData(GL_ARRAY_BUFFER, 6 * sizeof(positions.data()), positions.data(), GL_STATIC_DRAW);
+	glEnableVertexAttribArray(1);
+	glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(GLfloat), NULL);
+	glVertexAttribDivisor(1, 1);
+
+	def.num_instances = 2;
+
+	AddInstancedShader(1337);
+	def.shaderprogram = 1337;
+	AddRenderDef(def);
+
+	return 0;
 }
 
 int GLRenderer::Render()
 {
-	shader_programme = _shaderMgr->GetProgram(1337).glProgram;
-
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-	glUseProgram(shader_programme);
-	glBindVertexArray(vao);
-	// draw points 0-3 from the currently bound VAO with current in-use shader
-	glDrawArrays(GL_TRIANGLES, 0, 3);
+
+	uint32_t next = 0;
+	int size = 0;
+	ShaderInstance inst;
+	ModelRenderDef def;
+	if (array::size(_instanceRenders._data) > 0)
+	{
+		inst = hash::begin(_instanceRenders)->value;
+		glUseProgram(inst.glProgram);
+		while (next != -1)
+		{
+			size = array::size(*inst.renderDefs);
+			for (int n = 0; n < size; n++)
+			{
+				def = (*inst.renderDefs)[n];
+				glBindVertexArray(def.vao);
+				glDrawArraysInstanced(GL_TRIANGLES, 
+					0, 3, def.num_instances);
+			}
+			next = _instanceRenders._data[next].next;
+		}
+	}
+	return 0;
+}
+
+int GLRenderer::AddRenderDef(ModelRenderDef& def)
+{
+	ShaderInstance inst;
+	inst = hash::get(_instanceRenders, def.shaderprogram, inst);
+	if (inst.glProgram == -1)
+		return -1;
+
+	array::push_back(*inst.renderDefs, def);
+
+	return 0;
+}
+
+int GLRenderer::AddInstancedShader(uint64_t shader)
+{
+	ShaderProgram prog;
+	prog = _shaderMgr->GetProgram(shader);
+	if (prog.glProgram == -1)
+		return -1;
+
+	ShaderInstance inst;
+	inst.glProgram = prog.glProgram;
+	inst.renderDefs = new Array<ModelRenderDef>(*_alloc);
+
+	hash::set(_instanceRenders, shader, inst);
 
 	return 0;
 }

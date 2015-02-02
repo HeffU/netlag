@@ -112,6 +112,8 @@ int Engine::Run()
 	_assetMgr->UnloadFileList(list);
 	foundation::array::clear(list);
 
+	_renderer->Initialize();
+
 	_running = true;
 
 
@@ -143,6 +145,7 @@ int Engine::Cleanup()
 	delete _scriptMgr;
 
 	delete _shaderMgr;
+	delete _renderer;
 
 	return 0;
 }

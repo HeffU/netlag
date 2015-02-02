@@ -21,6 +21,7 @@ along with this program.If not, see <http://www.gnu.org/licenses/
 
 #include "..\engine.h"
 #include "collection_types.h"
+#include "rendertypes.h"
 
 namespace netlag
 {
@@ -33,11 +34,18 @@ namespace netlag
 		GLRenderer(foundation::Allocator* alloc, ShaderManager* shaders);
 		~GLRenderer();
 
+		int Initialize();
+
 		int Render();
+
+		int AddRenderDef(ModelRenderDef& def);
+		int AddInstancedShader(uint64_t shader);
 
 	private:
 
 		ShaderManager* _shaderMgr;
 		foundation::Allocator *_alloc;
+
+		foundation::Hash<ShaderInstance> _instanceRenders;
 	};
 }

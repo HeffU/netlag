@@ -73,7 +73,7 @@ void ShaderManager::DestroyProgram(uint64_t program)
 {
 	ShaderProgram _program;
 	_program = hash::get<ShaderProgram>(_shaders, program, _program);
-	if (_program.users == nullptr)
+	if (_program.glProgram = -1)
 		return;
 
 	glDeleteProgram(_program.glProgram);
@@ -87,7 +87,7 @@ void ShaderManager::RecompileProgram(uint64_t program)
 {
 	ShaderProgram _program;
 	_program = hash::get<ShaderProgram>(_shaders, program, _program);
-	if (_program.users == nullptr)
+	if (_program.glProgram = -1)
 		return;
 
 	glDeleteProgram(_program.glProgram);
